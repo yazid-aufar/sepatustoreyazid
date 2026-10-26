@@ -6,5 +6,5 @@ interface PromoCodeRepositoryInterface
 {
     public function getAllPromoCode();
 
-    public function findByCode(string $code)
+    public function findByCode(string $code);
 }

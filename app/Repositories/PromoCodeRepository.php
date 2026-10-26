@@ -12,7 +12,7 @@ class PromoCodeRepository implements PromoCodeRepositoryInterface
         return PromoCode::latest()->get();
     }
 
-    public function findByCode(string $code);
+    public function findByCode(string $code)
     {
         return PromoCode::where('code', $code)->first();
     }

@@ -7,11 +7,15 @@ use App\Repositories\Contracts\CategoryRepositoryInterface;
 use App\Repositories\Contracts\OrderRepositoryInterface;
 use App\Repositories\Contracts\PromoCodeRepositoryInterface;
 use App\Repositories\Contracts\ShoeRepositoryInterface;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class OrderService
 {
+    private const TAX_RATE = 0.11;
+
     protected $orderRepository;
     protected $shoeRepository;
     protected $categoryRepository;
@@ -35,9 +39,16 @@ class OrderService
             'shoe_size' => $data['shoe_size'],
             'size_id' => $data['size_id'],
             'shoe_id' => $data['shoe_id'],
+            'quantity' => $data['quantity'] ?? 1,
+            'promo_code' => null,
+            'promo_code_id' => null,
+            'discount_amount' => 0,
         ];
 
+        // Pesanan baru mengganti seluruh data pesanan sebelumnya.
         $this->orderRepository->saveToSession($orderData);
+
+        return $this->getOrderDetails();
     }
 
     public function getOrderDetails()
@@ -54,39 +65,82 @@ class OrderService
             throw new \RuntimeException('Sepatu tidak ditemukan.');
         }
 
-        $quantity = isset($orderData['quantity']) ? $orderData['quantity'] : 1;
-        $subTotalAmount = $shoe->price * $quantity;
+        $quantity = filter_var(
+            $orderData['quantity'] ?? 1,
+            FILTER_VALIDATE_INT,
+            ['options' => ['min_range' => 1]]
+        );
 
-        $taxRate = 0.11; // 11% tax rate
-        $totalTax = $subTotalAmount * $taxRate;
+        if ($quantity === false) {
+            throw new \RuntimeException('Jumlah sepatu harus bilangan bulat minimal 1.');
+        }
 
-        $grandTotalAmount = $subTotalAmount + $totalTax;
+        // Harga selalu diambil dari database.
+        $subTotalAmount = (int) $shoe->price * $quantity;
+        $promo = null;
 
-        $orderData['sub_total_amount'] = $subTotalAmount;
-        $orderData['total_tax'] = $totalTax;
-        $orderData['grand_total_amount'] = $grandTotalAmount;
+        if (!empty($orderData['promo_code'])) {
+            $promo = $this->promoCodeRepository->findByCode($orderData['promo_code']);
+
+            if (!$promo) {
+                throw new \RuntimeException('Kode promo sudah tidak tersedia.');
+            }
+        }
+
+        // Diskon minimal 0 dan maksimal sebesar subtotal.
+        $discountAmount = $promo
+            ? min($subTotalAmount, max(0, (int) $promo->discount_amount))
+            : 0;
+
+        // Mengikuti rumus awal: pajak dihitung dari subtotal sebelum diskon.
+        $totalTax = (int) round($subTotalAmount * self::TAX_RATE);
+        $grandTotalAmount = $subTotalAmount + $totalTax - $discountAmount;
+
+        $orderData = array_merge($orderData, [
+            'quantity' => $quantity,
+            'sub_total_amount' => $subTotalAmount,
+            'total_tax' => $totalTax,
+            'discount_amount' => $discountAmount,
+            'grand_total_amount' => $grandTotalAmount,
+            'promo_code' => $promo ? $promo->code : null,
+            'promo_code_id' => $promo ? $promo->id : null,
+        ]);
+
+        // Hasil perhitungan disimpan agar tersedia saat pembayaran.
+        $this->orderRepository->updateSessionData($orderData);
 
         return compact('orderData', 'shoe');
     }
 
-    public function applyPromoCode(string $code, int $subTotalAmount)
+    public function applyPromoCode(string $code)
     {
-        $promo = $this->promoCodeRepository->findByCode($code);
+        $code = trim($code);
 
-        if ($promo) {
-            $discount = $promo->discount_amount;
-            $grandTotalAmount = $subTotalAmount - $discount;
-            $promoCodeId = $promo->id;
-            return ['discount' => $discount, 'grandTotalAmount' => $grandTotalAmount,
-            'promoCodeId' => $promoCodeId];
+        if ($code !== '' && !$this->promoCodeRepository->findByCode($code)) {
+            return ['error' => 'Kode promo tidak ditemukan.'];
         }
 
-        return ['error' => 'Promo code not found'];
+        // Kode kosong menghapus promo yang sebelumnya dipakai.
+        $this->orderRepository->updateSessionData([
+            'promo_code' => $code !== '' ? $code : null,
+        ]);
+
+        $orderData = $this->getOrderDetails()['orderData'];
+
+        return [
+            'discount_amount' => $orderData['discount_amount'],
+            'grand_total_amount' => $orderData['grand_total_amount'],
+            'total_tax' => $orderData['total_tax'],
+            'promo_code_id' => $orderData['promo_code_id'],
+        ];
     }
 
     public function saveBookingTransaction(array $data)
     {
-        $this->orderRepository->saveToSession($data);
+        // Gabungkan perubahan dengan data sepatu yang sudah ada.
+        $this->orderRepository->updateSessionData($data);
+
+        return $this->getOrderDetails();
     }
 
     public function updateCustomerData(array $data)
@@ -96,46 +150,60 @@ class OrderService
 
     public function paymentConfirm(array $validated)
     {
-        $orderData = $this->orderRepository->getOrderDataFromSession();
+        $proofPath = null;
 
+        try {
+            // Hitung ulang sebelum disimpan sebagai transaksi.
+            $orderData = $this->getOrderDetails()['orderData'];
 
-        $productTransactionId = null;
+            foreach (['name', 'email', 'phone', 'address', 'post_code', 'city', 'size_id'] as $field) {
+                if (!isset($orderData[$field]) || $orderData[$field] === '') {
+                    throw new \RuntimeException('Data pelanggan atau ukuran sepatu belum lengkap.');
+                }
+            }
 
-        try { // closure to handle the transaction
-            DB::transaction(function () use ($validated, &$productTransactionId, $orderData) {
-               if (isset($validated['proof'])) {
-                    $proofPath = $validated['proof']->store('proofs', 'public');
-                    $validated['proof'] = $proofPath;
-               }
+            if (!(($validated['proof'] ?? null) instanceof UploadedFile)) {
+                throw new \RuntimeException('Bukti pembayaran wajib diunggah.');
+            }
 
-               $validated['name'] = $orderData['name'];
-               $validated['email'] = $orderData['email'];
-               $validated['phone'] = $orderData['phone'];
-               $validated['address'] = $orderData['address'];
-               $validated['post_code'] = $orderData['post_code'];
-               $validated['city'] = $orderData['city'];
-               $validated['quantity'] = $orderData['quantity'];
-               $validated['sub_total_amount'] = $orderData['sub_total_amount'];
-               $validated['grand_total_amount'] = $orderData['grand_total_amount'];
-               $validated['discount_amount'] = $orderData['total_discount_amount'];
-               $validated['promo_code_id'] = $orderData['promo_code_id'];
-               $validated['shoe_id'] = $orderData['shoe_id'];
-               $validated['shoe_size'] = $orderData['size_id'];
+            $proofPath = $validated['proof']->store('proofs', 'public');
 
-               $validated['is_paid'] = false;
+            if (!$proofPath) {
+                throw new \RuntimeException('Bukti pembayaran gagal disimpan.');
+            }
 
-               $validated['booking_trx_id'] = ProductTransaction::generateUniqueTrxId();
+            return DB::transaction(function () use ($orderData, $proofPath) {
+                $transaction = $this->orderRepository->createTransaction([
+                    'name' => $orderData['name'],
+                    'email' => $orderData['email'],
+                    'phone' => $orderData['phone'],
+                    'address' => $orderData['address'],
+                    'post_code' => $orderData['post_code'],
+                    'city' => $orderData['city'],
+                    'quantity' => $orderData['quantity'],
+                    'sub_total_amount' => $orderData['sub_total_amount'],
+                    'grand_total_amount' => $orderData['grand_total_amount'],
+                    'discount_amount' => $orderData['discount_amount'],
+                    'promo_code_id' => $orderData['promo_code_id'],
+                    'shoe_id' => $orderData['shoe_id'],
+                    'shoe_size' => $orderData['size_id'],
+                    'is_paid' => false,
+                    'booking_trx_id' => ProductTransaction::generateUniqueTrxId(),
+                    'proof' => $proofPath,
+                ]);
 
-               $newTransaction = $this->orderRepository->createTransaction($validated);
-
-               $productTransactionId = $newTransaction->id;
+                return $transaction->id;
             });
-        } catch (\Exception $e) {
-            Log::error('Error in payment confirmation: ' . $e->getMessage());
-            session()->flash('error', $e->getMessage());
-            return null; // Return null to indicate failure
-        }
+        } catch (\Throwable $e) {
+            // Transaksi database tidak otomatis menghapus file unggahan.
+            if ($proofPath) {
+                Storage::disk('public')->delete($proofPath);
+            }
 
-        return $productTransactionId;
+            Log::error('Error in payment confirmation: ' . $e->getMessage());
+            session()->flash('error', 'Pesanan gagal disimpan. Periksa data dan coba kembali.');
+
+            return null;
+        }
     }
 }
