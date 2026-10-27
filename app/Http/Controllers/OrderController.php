@@ -7,6 +7,7 @@ use App\Http\Requests\StoreCustomerDataRequest;
 use App\Http\Requests\StorePaymentRequest;
 use App\Services\OrderService;
 use App\Models\Shoe;
+use App\Models\ProductTransaction;
 
 use Illuminate\Http\Request;
 
