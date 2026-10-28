@@ -4,24 +4,7 @@
   <!-- Required Meta Tags Always Come First -->
   <meta charset="utf-8">
   <meta name="robots" content="max-snippet:-1, max-image-preview:large, max-video-preview:-1">
-  <link rel="canonical" href="https://preline.co/">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="A modern eCommerce template for multi-vendor stores with an advanced Mega Menu, filtering, and seamless browsing.">
 
-  <meta name="twitter:site" content="@preline">
-  <meta name="twitter:creator" content="@preline">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Shop | Preline Pro | Preline UI, crafted with Tailwind CSS">
-  <meta name="twitter:description" content="A modern eCommerce template for multi-vendor stores with an advanced Mega Menu, filtering, and seamless browsing.">
-  <meta name="twitter:image" content="https://preline.co/assets/img/og-image.png">
-
-  <meta property="og:url" content="https://preline.co/">
-  <meta property="og:locale" content="en_US">
-  <meta property="og:type" content="website">
-  <meta property="og:site_name" content="Preline">
-  <meta property="og:title" content="Shop | Preline Pro | Preline UI, crafted with Tailwind CSS">
-  <meta property="og:description" content="A modern eCommerce template for multi-vendor stores with an advanced Mega Menu, filtering, and seamless browsing.">
-  <meta property="og:image" content="https://preline.co/assets/img/og-image.png">
 
   <!-- Title -->
   <title>SepatuStore</title>
@@ -1216,294 +1199,7 @@
                       </div>
                       <!-- End Tab -->
 
-                      <!-- Tab -->
-                      <div id="mega-menu-catalog-tab-3" class="hidden h-full" role="tabpanel" aria-labelledby="mega-menu-catalog-tab-item-3">
-                        <!-- Loading Indicator -->
-                        <div class="h-full flex flex-col justify-center items-center text-center">
-                          <span class="py-1.5 inline-flex gap-x-1">
-                            <span class="size-2.5 bg-gray-800 rounded-full animate-[typing_1s_ease-in-out_infinite] dark:bg-neutral-200"></span>
-                            <span class="size-2.5 bg-gray-800 rounded-full animate-[typing_1s_ease-in-out_infinite_0.2s] dark:bg-neutral-200"></span>
-                            <span class="size-2.5 bg-gray-800 rounded-full animate-[typing_1s_ease-in-out_infinite_0.4s] dark:bg-neutral-200"></span>
-                          </span>
-                          <p class="mt-3 text-sm text-gray-500 dark:text-neutral-500">
-                            This is a placeholder loader.<br>This conent is empty.
-                          </p>
-                        </div>
-                        <!-- End Loading Indicator -->
-                      </div>
-                      <!-- End Tab -->
 
-                      <!-- Tab -->
-                      <div id="mega-menu-catalog-tab-4" class="hidden h-full" role="tabpanel" aria-labelledby="mega-menu-catalog-tab-item-4">
-                        <!-- Loading Indicator -->
-                        <div class="h-full flex flex-col justify-center items-center text-center">
-                          <span class="py-1.5 inline-flex gap-x-1">
-                            <span class="size-2.5 bg-gray-800 rounded-full animate-[typing_1s_ease-in-out_infinite] dark:bg-neutral-200"></span>
-                            <span class="size-2.5 bg-gray-800 rounded-full animate-[typing_1s_ease-in-out_infinite_0.2s] dark:bg-neutral-200"></span>
-                            <span class="size-2.5 bg-gray-800 rounded-full animate-[typing_1s_ease-in-out_infinite_0.4s] dark:bg-neutral-200"></span>
-                          </span>
-                          <p class="mt-3 text-sm text-gray-500 dark:text-neutral-500">
-                            This is a placeholder loader.<br>This conent is empty.
-                          </p>
-                        </div>
-                        <!-- End Loading Indicator -->
-                      </div>
-                      <!-- End Tab -->
-
-                      <!-- Tab -->
-                      <div id="mega-menu-catalog-tab-5" class="hidden h-full" role="tabpanel" aria-labelledby="mega-menu-catalog-tab-item-5">
-                        <!-- Loading Indicator -->
-                        <div class="h-full flex flex-col justify-center items-center text-center">
-                          <span class="py-1.5 inline-flex gap-x-1">
-                            <span class="size-2.5 bg-gray-800 rounded-full animate-[typing_1s_ease-in-out_infinite] dark:bg-neutral-200"></span>
-                            <span class="size-2.5 bg-gray-800 rounded-full animate-[typing_1s_ease-in-out_infinite_0.2s] dark:bg-neutral-200"></span>
-                            <span class="size-2.5 bg-gray-800 rounded-full animate-[typing_1s_ease-in-out_infinite_0.4s] dark:bg-neutral-200"></span>
-                          </span>
-                          <p class="mt-3 text-sm text-gray-500 dark:text-neutral-500">
-                            This is a placeholder loader.<br>This conent is empty.
-                          </p>
-                        </div>
-                        <!-- End Loading Indicator -->
-                      </div>
-                      <!-- End Tab -->
-
-                      <!-- Tab -->
-                      <div id="mega-menu-catalog-tab-6" class="hidden h-full" role="tabpanel" aria-labelledby="mega-menu-catalog-tab-item-6">
-                        <!-- Loading Indicator -->
-                        <div class="h-full flex flex-col justify-center items-center text-center">
-                          <span class="py-1.5 inline-flex gap-x-1">
-                            <span class="size-2.5 bg-gray-800 rounded-full animate-[typing_1s_ease-in-out_infinite] dark:bg-neutral-200"></span>
-                            <span class="size-2.5 bg-gray-800 rounded-full animate-[typing_1s_ease-in-out_infinite_0.2s] dark:bg-neutral-200"></span>
-                            <span class="size-2.5 bg-gray-800 rounded-full animate-[typing_1s_ease-in-out_infinite_0.4s] dark:bg-neutral-200"></span>
-                          </span>
-                          <p class="mt-3 text-sm text-gray-500 dark:text-neutral-500">
-                            This is a placeholder loader.<br>This conent is empty.
-                          </p>
-                        </div>
-                        <!-- End Loading Indicator -->
-                      </div>
-                      <!-- End Tab -->
-
-                      <!-- Tab -->
-                      <div id="mega-menu-catalog-tab-7" class="hidden h-full" role="tabpanel" aria-labelledby="mega-menu-catalog-tab-item-7">
-                        <!-- Loading Indicator -->
-                        <div class="h-full flex flex-col justify-center items-center text-center">
-                          <span class="py-1.5 inline-flex gap-x-1">
-                            <span class="size-2.5 bg-gray-800 rounded-full animate-[typing_1s_ease-in-out_infinite] dark:bg-neutral-200"></span>
-                            <span class="size-2.5 bg-gray-800 rounded-full animate-[typing_1s_ease-in-out_infinite_0.2s] dark:bg-neutral-200"></span>
-                            <span class="size-2.5 bg-gray-800 rounded-full animate-[typing_1s_ease-in-out_infinite_0.4s] dark:bg-neutral-200"></span>
-                          </span>
-                          <p class="mt-3 text-sm text-gray-500 dark:text-neutral-500">
-                            This is a placeholder loader.<br>This conent is empty.
-                          </p>
-                        </div>
-                        <!-- End Loading Indicator -->
-                      </div>
-                      <!-- End Tab -->
-
-                      <!-- Tab -->
-                      <div id="mega-menu-catalog-tab-8" class="hidden h-full" role="tabpanel" aria-labelledby="mega-menu-catalog-tab-item-8">
-                        <!-- Loading Indicator -->
-                        <div class="h-full flex flex-col justify-center items-center text-center">
-                          <span class="py-1.5 inline-flex gap-x-1">
-                            <span class="size-2.5 bg-gray-800 rounded-full animate-[typing_1s_ease-in-out_infinite] dark:bg-neutral-200"></span>
-                            <span class="size-2.5 bg-gray-800 rounded-full animate-[typing_1s_ease-in-out_infinite_0.2s] dark:bg-neutral-200"></span>
-                            <span class="size-2.5 bg-gray-800 rounded-full animate-[typing_1s_ease-in-out_infinite_0.4s] dark:bg-neutral-200"></span>
-                          </span>
-                          <p class="mt-3 text-sm text-gray-500 dark:text-neutral-500">
-                            This is a placeholder loader.<br>This conent is empty.
-                          </p>
-                        </div>
-                        <!-- End Loading Indicator -->
-                      </div>
-                      <!-- End Tab -->
-
-                      <!-- Tab -->
-                      <div id="mega-menu-catalog-tab-9" class="hidden h-full" role="tabpanel" aria-labelledby="mega-menu-catalog-tab-item-9">
-                        <!-- Loading Indicator -->
-                        <div class="h-full flex flex-col justify-center items-center text-center">
-                          <span class="py-1.5 inline-flex gap-x-1">
-                            <span class="size-2.5 bg-gray-800 rounded-full animate-[typing_1s_ease-in-out_infinite] dark:bg-neutral-200"></span>
-                            <span class="size-2.5 bg-gray-800 rounded-full animate-[typing_1s_ease-in-out_infinite_0.2s] dark:bg-neutral-200"></span>
-                            <span class="size-2.5 bg-gray-800 rounded-full animate-[typing_1s_ease-in-out_infinite_0.4s] dark:bg-neutral-200"></span>
-                          </span>
-                          <p class="mt-3 text-sm text-gray-500 dark:text-neutral-500">
-                            This is a placeholder loader.<br>This conent is empty.
-                          </p>
-                        </div>
-                        <!-- End Loading Indicator -->
-                      </div>
-                      <!-- End Tab -->
-
-                      <!-- Tab -->
-                      <div id="mega-menu-catalog-tab-10" class="hidden h-full" role="tabpanel" aria-labelledby="mega-menu-catalog-tab-item-10">
-                        <!-- Loading Indicator -->
-                        <div class="h-full flex flex-col justify-center items-center text-center">
-                          <span class="py-1.5 inline-flex gap-x-1">
-                            <span class="size-2.5 bg-gray-800 rounded-full animate-[typing_1s_ease-in-out_infinite] dark:bg-neutral-200"></span>
-                            <span class="size-2.5 bg-gray-800 rounded-full animate-[typing_1s_ease-in-out_infinite_0.2s] dark:bg-neutral-200"></span>
-                            <span class="size-2.5 bg-gray-800 rounded-full animate-[typing_1s_ease-in-out_infinite_0.4s] dark:bg-neutral-200"></span>
-                          </span>
-                          <p class="mt-3 text-sm text-gray-500 dark:text-neutral-500">
-                            This is a placeholder loader.<br>This conent is empty.
-                          </p>
-                        </div>
-                        <!-- End Loading Indicator -->
-                      </div>
-                      <!-- End Tab -->
-
-                      <!-- Tab -->
-                      <div id="mega-menu-catalog-tab-11" class="hidden h-full" role="tabpanel" aria-labelledby="mega-menu-catalog-tab-item-11">
-                        <!-- Loading Indicator -->
-                        <div class="h-full flex flex-col justify-center items-center text-center">
-                          <span class="py-1.5 inline-flex gap-x-1">
-                            <span class="size-2.5 bg-gray-800 rounded-full animate-[typing_1s_ease-in-out_infinite] dark:bg-neutral-200"></span>
-                            <span class="size-2.5 bg-gray-800 rounded-full animate-[typing_1s_ease-in-out_infinite_0.2s] dark:bg-neutral-200"></span>
-                            <span class="size-2.5 bg-gray-800 rounded-full animate-[typing_1s_ease-in-out_infinite_0.4s] dark:bg-neutral-200"></span>
-                          </span>
-                          <p class="mt-3 text-sm text-gray-500 dark:text-neutral-500">
-                            This is a placeholder loader.<br>This conent is empty.
-                          </p>
-                        </div>
-                        <!-- End Loading Indicator -->
-                      </div>
-                      <!-- End Tab -->
-
-                      <!-- Tab -->
-                      <div id="mega-menu-catalog-tab-12" class="hidden h-full" role="tabpanel" aria-labelledby="mega-menu-catalog-tab-item-12">
-                        <!-- Loading Indicator -->
-                        <div class="h-full flex flex-col justify-center items-center text-center">
-                          <span class="py-1.5 inline-flex gap-x-1">
-                            <span class="size-2.5 bg-gray-800 rounded-full animate-[typing_1s_ease-in-out_infinite] dark:bg-neutral-200"></span>
-                            <span class="size-2.5 bg-gray-800 rounded-full animate-[typing_1s_ease-in-out_infinite_0.2s] dark:bg-neutral-200"></span>
-                            <span class="size-2.5 bg-gray-800 rounded-full animate-[typing_1s_ease-in-out_infinite_0.4s] dark:bg-neutral-200"></span>
-                          </span>
-                          <p class="mt-3 text-sm text-gray-500 dark:text-neutral-500">
-                            This is a placeholder loader.<br>This conent is empty.
-                          </p>
-                        </div>
-                        <!-- End Loading Indicator -->
-                      </div>
-                      <!-- End Tab -->
-
-                      <!-- Tab -->
-                      <div id="mega-menu-catalog-tab-13" class="hidden h-full" role="tabpanel" aria-labelledby="mega-menu-catalog-tab-item-13">
-                        <!-- Loading Indicator -->
-                        <div class="h-full flex flex-col justify-center items-center text-center">
-                          <span class="py-1.5 inline-flex gap-x-1">
-                            <span class="size-2.5 bg-gray-800 rounded-full animate-[typing_1s_ease-in-out_infinite] dark:bg-neutral-200"></span>
-                            <span class="size-2.5 bg-gray-800 rounded-full animate-[typing_1s_ease-in-out_infinite_0.2s] dark:bg-neutral-200"></span>
-                            <span class="size-2.5 bg-gray-800 rounded-full animate-[typing_1s_ease-in-out_infinite_0.4s] dark:bg-neutral-200"></span>
-                          </span>
-                          <p class="mt-3 text-sm text-gray-500 dark:text-neutral-500">
-                            This is a placeholder loader.<br>This conent is empty.
-                          </p>
-                        </div>
-                        <!-- End Loading Indicator -->
-                      </div>
-                      <!-- End Tab -->
-
-                      <!-- Tab -->
-                      <div id="mega-menu-catalog-tab-14" class="hidden h-full" role="tabpanel" aria-labelledby="mega-menu-catalog-tab-item-14">
-                        <!-- Loading Indicator -->
-                        <div class="h-full flex flex-col justify-center items-center text-center">
-                          <span class="py-1.5 inline-flex gap-x-1">
-                            <span class="size-2.5 bg-gray-800 rounded-full animate-[typing_1s_ease-in-out_infinite] dark:bg-neutral-200"></span>
-                            <span class="size-2.5 bg-gray-800 rounded-full animate-[typing_1s_ease-in-out_infinite_0.2s] dark:bg-neutral-200"></span>
-                            <span class="size-2.5 bg-gray-800 rounded-full animate-[typing_1s_ease-in-out_infinite_0.4s] dark:bg-neutral-200"></span>
-                          </span>
-                          <p class="mt-3 text-sm text-gray-500 dark:text-neutral-500">
-                            This is a placeholder loader.<br>This conent is empty.
-                          </p>
-                        </div>
-                        <!-- End Loading Indicator -->
-                      </div>
-                      <!-- End Tab -->
-
-                      <!-- Tab -->
-                      <div id="mega-menu-catalog-tab-15" class="hidden h-full" role="tabpanel" aria-labelledby="mega-menu-catalog-tab-item-15">
-                        <!-- Loading Indicator -->
-                        <div class="h-full flex flex-col justify-center items-center text-center">
-                          <span class="py-1.5 inline-flex gap-x-1">
-                            <span class="size-2.5 bg-gray-800 rounded-full animate-[typing_1s_ease-in-out_infinite] dark:bg-neutral-200"></span>
-                            <span class="size-2.5 bg-gray-800 rounded-full animate-[typing_1s_ease-in-out_infinite_0.2s] dark:bg-neutral-200"></span>
-                            <span class="size-2.5 bg-gray-800 rounded-full animate-[typing_1s_ease-in-out_infinite_0.4s] dark:bg-neutral-200"></span>
-                          </span>
-                          <p class="mt-3 text-sm text-gray-500 dark:text-neutral-500">
-                            This is a placeholder loader.<br>This conent is empty.
-                          </p>
-                        </div>
-                        <!-- End Loading Indicator -->
-                      </div>
-                      <!-- End Tab -->
-
-                      <!-- Tab -->
-                      <div id="mega-menu-catalog-tab-16" class="hidden h-full" role="tabpanel" aria-labelledby="mega-menu-catalog-tab-item-16">
-                        <!-- Loading Indicator -->
-                        <div class="h-full flex flex-col justify-center items-center text-center">
-                          <span class="py-1.5 inline-flex gap-x-1">
-                            <span class="size-2.5 bg-gray-800 rounded-full animate-[typing_1s_ease-in-out_infinite] dark:bg-neutral-200"></span>
-                            <span class="size-2.5 bg-gray-800 rounded-full animate-[typing_1s_ease-in-out_infinite_0.2s] dark:bg-neutral-200"></span>
-                            <span class="size-2.5 bg-gray-800 rounded-full animate-[typing_1s_ease-in-out_infinite_0.4s] dark:bg-neutral-200"></span>
-                          </span>
-                          <p class="mt-3 text-sm text-gray-500 dark:text-neutral-500">
-                            This is a placeholder loader.<br>This conent is empty.
-                          </p>
-                        </div>
-                        <!-- End Loading Indicator -->
-                      </div>
-                      <!-- End Tab -->
-
-                      <!-- Tab -->
-                      <div id="mega-menu-catalog-tab-17" class="hidden h-full" role="tabpanel" aria-labelledby="mega-menu-catalog-tab-item-17">
-                        <!-- Loading Indicator -->
-                        <div class="h-full flex flex-col justify-center items-center text-center">
-                          <span class="py-1.5 inline-flex gap-x-1">
-                            <span class="size-2.5 bg-gray-800 rounded-full animate-[typing_1s_ease-in-out_infinite] dark:bg-neutral-200"></span>
-                            <span class="size-2.5 bg-gray-800 rounded-full animate-[typing_1s_ease-in-out_infinite_0.2s] dark:bg-neutral-200"></span>
-                            <span class="size-2.5 bg-gray-800 rounded-full animate-[typing_1s_ease-in-out_infinite_0.4s] dark:bg-neutral-200"></span>
-                          </span>
-                          <p class="mt-3 text-sm text-gray-500 dark:text-neutral-500">
-                            This is a placeholder loader.<br>This conent is empty.
-                          </p>
-                        </div>
-                        <!-- End Loading Indicator -->
-                      </div>
-                      <!-- End Tab -->
-
-                      <!-- Tab -->
-                      <div id="mega-menu-catalog-tab-18" class="hidden h-full" role="tabpanel" aria-labelledby="mega-menu-catalog-tab-item-18">
-                        <!-- Loading Indicator -->
-                        <div class="h-full flex flex-col justify-center items-center text-center">
-                          <span class="py-1.5 inline-flex gap-x-1">
-                            <span class="size-2.5 bg-gray-800 rounded-full animate-[typing_1s_ease-in-out_infinite] dark:bg-neutral-200"></span>
-                            <span class="size-2.5 bg-gray-800 rounded-full animate-[typing_1s_ease-in-out_infinite_0.2s] dark:bg-neutral-200"></span>
-                            <span class="size-2.5 bg-gray-800 rounded-full animate-[typing_1s_ease-in-out_infinite_0.4s] dark:bg-neutral-200"></span>
-                          </span>
-                          <p class="mt-3 text-sm text-gray-500 dark:text-neutral-500">
-                            This is a placeholder loader.<br>This conent is empty.
-                          </p>
-                        </div>
-                        <!-- End Loading Indicator -->
-                      </div>
-                      <!-- End Tab -->
-
-                      <!-- Tab -->
-                      <div id="mega-menu-catalog-tab-19" class="hidden h-full" role="tabpanel" aria-labelledby="mega-menu-catalog-tab-item-19">
-                        <!-- Loading Indicator -->
-                        <div class="h-full flex flex-col justify-center items-center text-center">
-                          <span class="py-1.5 inline-flex gap-x-1">
-                            <span class="size-2.5 bg-gray-800 rounded-full animate-[typing_1s_ease-in-out_infinite] dark:bg-neutral-200"></span>
-                            <span class="size-2.5 bg-gray-800 rounded-full animate-[typing_1s_ease-in-out_infinite_0.2s] dark:bg-neutral-200"></span>
-                            <span class="size-2.5 bg-gray-800 rounded-full animate-[typing_1s_ease-in-out_infinite_0.4s] dark:bg-neutral-200"></span>
-                          </span>
-                          <p class="mt-3 text-sm text-gray-500 dark:text-neutral-500">
-                            This is a placeholder loader.<br>This conent is empty.
-                          </p>
-                        </div>
-                        <!-- End Loading Indicator -->
-                      </div>
-                      <!-- End Tab -->
                     </div>
                     <!-- End Content -->
                   </div>
@@ -1527,16 +1223,7 @@
                     </svg>
                   </button>
                 </div>
-                <div class="hidden absolute inset-y-0 end-12 flex items-center pointer-events-none z-10 pe-1">
-                  <button type="button" class="inline-flex shrink-0 justify-center items-center size-6 rounded-full text-gray-500 hover:text-emerald-600 focus:outline-hidden focus:text-emerald-600 dark:text-neutral-500 dark:hover:text-emerald-500 dark:focus:text-emerald-500" aria-label="Close">
-                    <span class="sr-only">Close</span>
-                    <svg class="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                      <circle cx="12" cy="12" r="10" />
-                      <path d="m15 9-6 6" />
-                      <path d="m9 9 6 6" />
-                    </svg>
-                  </button>
-                </div>
+
               </div>
               <!-- End Search Input -->
             </div>
@@ -1585,16 +1272,7 @@
               </svg>
             </button>
           </div>
-          <div class="hidden absolute inset-y-0 end-12 flex items-center pointer-events-none z-10 pe-1">
-            <button type="button" class="inline-flex shrink-0 justify-center items-center size-6 rounded-full text-gray-500 hover:text-emerald-600 focus:outline-hidden focus:text-emerald-600 dark:text-neutral-500 dark:hover:text-emerald-500 dark:focus:text-emerald-500" aria-label="Close">
-              <span class="sr-only">Close</span>
-              <svg class="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="12" cy="12" r="10" />
-                <path d="m15 9-6 6" />
-                <path d="m9 9 6 6" />
-              </svg>
-            </button>
-          </div>
+
         </div>
         <!-- End Search Input -->
       </div>
@@ -2495,9 +2173,7 @@
   <script src="{{ asset('assets/vendor/@floating-ui/dom/dist/floating-ui.dom.umd.min.js') }}"></script>
   <!-- Required plugins -->
   <script src="{{ asset('assets/vendor/preline/dist/index.js?v=3.0.1') }}"></script>
-  <!-- Clipboard -->
-  <script src="{{ asset('assets/vendor/clipboard/dist/clipboard.min.js') }}"></script>
-  <script src="{{ asset('assets/js/hs-copy-clipboard-helper.js') }}"></script>
+
 
   <!-- Catalog navigation -->
   <script>
