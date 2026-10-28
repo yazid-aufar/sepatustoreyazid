@@ -7,9 +7,12 @@ use App\Repositories\Contracts\ShoeRepositoryInterface;
 
 class ShoeRepository implements ShoeRepositoryInterface
 {
-    public function getPopularShoes($limit = 4) // Default limit set to 4
+    public function getPopularShoes($limit = 4)
     {
-        return Shoe::where('is_popular', true)->take($limit)->get();
+        return Shoe::with('brand')
+            ->where('is_popular', true)
+            ->take($limit)
+            ->get();
     }
 
     public function searchByName(string $keyword)

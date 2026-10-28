@@ -445,152 +445,53 @@
       </div>
       <!-- End Header -->
 
-      <!-- Grid -->
-      <div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-y-10 gap-x-4">
+        <!-- Grid -->
+        <div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-y-10 gap-x-4">
+        @php
+            $shoeDisk = \Illuminate\Support\Facades\Storage::disk();
+        @endphp
 
-        <!-- Card -->
-        <div class="h-full flex flex-col">
-          <div class="group relative">
-            <div class="relative">
-              <a class="block shrink-0 relative w-full h-48 md:h-64 overflow-hidden rounded-xl focus:outline-hidden" href="../../pro/shop-marketplace/product-detail.html">
-                <img class="size-full absolute inset-0 object-cover object-center group-hover:scale-105 group-focus:scale-105 transition-transform duration-500 ease-in-out rounded-xl" src="{{ asset('assets/img/product/ADIDAS-FFSSBADI5-ADIHQ8708-Black 01-.webp') }}" alt="Product Image">
-              </a>
+        @forelse ($popularShoes as $shoe)
+            <!-- Card -->
+            <a
+            class="group h-full flex flex-col focus:outline-hidden"
+            href="{{ route('front.details', ['shoe' => $shoe->slug]) }}"
+            >
+            <div class="relative w-full h-48 md:h-64 overflow-hidden rounded-xl">
+                <img
+                class="size-full absolute inset-0 object-cover object-center group-hover:scale-105 group-focus:scale-105 transition-transform duration-500 ease-in-out rounded-xl"
+                src="{{ $shoeDisk->providesTemporaryUrls()
+                    ? $shoeDisk->temporaryUrl($shoe->thumbnail, now()->addHour())
+                    : $shoeDisk->url($shoe->thumbnail) }}"
+                alt="{{ $shoe->name }}"
+                loading="lazy"
+                >
             </div>
-
-            <a class="after:z-1 after:absolute after:inset-0" href="../../pro/shop-marketplace/product-detail.html"></a>
 
             <div class="pt-3">
-              <h4 class="font-medium text-sm text-gray-800 dark:text-neutral-200 capitalize">
-                Campus 00s Men's Sneakers - Core Black
-              </h4>
-              <div class="mt-1 flex flex-wrap items-center gap-1">
+                <h4 class="font-medium text-sm text-gray-800 dark:text-neutral-200 capitalize">
+                {{ $shoe->name }}
+                </h4>
+
+                <div class="mt-1 flex flex-wrap items-center gap-1">
                 <span class="font-semibold text-emerald-600 dark:text-emerald-500">
-                  Rp <span class="text-sm">1.700.000</span>
+                    Rp <span class="text-sm">{{ number_format($shoe->price, 0, ',', '.') }}</span>
                 </span>
+
                 <span class="ms-auto text-sm text-gray-500 dark:text-neutral-500">
-                  Adidas
+                    {{ $shoe->brand?->name ?? '-' }}
                 </span>
-              </div>
+                </div>
             </div>
-          </div>
+            </a>
+            <!-- End Card -->
+        @empty
+            <p class="col-span-full py-4 text-sm text-gray-500 dark:text-neutral-400">
+            Belum ada sepatu populer tersedia.
+            </p>
+        @endforelse
         </div>
-        <!-- End Card -->
-
-        <!-- Card -->
-        <div class="h-full flex flex-col">
-          <div class="group relative">
-            <div class="relative">
-              <a class="block shrink-0 relative w-full h-48 md:h-64 overflow-hidden rounded-xl focus:outline-hidden" href="../../pro/shop-marketplace/product-detail.html">
-                <img class="size-full absolute inset-0 object-cover object-center group-hover:scale-105 group-focus:scale-105 transition-transform duration-500 ease-in-out rounded-xl" src="{{ asset('assets/img/product/NIKE-F34KBNIK5-NIKIO7448400-Navy 01-.webp') }}" alt="Product Image">
-              </a>
-            </div>
-
-            <a class="after:z-1 after:absolute after:inset-0" href="../shop-marketplace/product-detail.html"></a>
-
-            <div class="pt-3">
-              <h4 class="font-medium text-sm text-gray-800 dark:text-neutral-200 capitalize">
-                air jordan 1 low - obsidian university gold
-              </h4>
-              <div class="mt-1 flex flex-wrap items-center gap-1">
-                <span class="font-semibold text-emerald-600 dark:text-emerald-500">
-                  Rp <span class="text-sm">1.939.000</span>
-                </span>
-                <span class="ms-auto text-sm text-gray-500 dark:text-neutral-500">
-                  Nike
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- End Card -->
-
-        <!-- Card -->
-        <div class="h-full flex flex-col">
-          <div class="group relative">
-            <div class="relative">
-              <a class="block shrink-0 relative w-full h-48 md:h-64 overflow-hidden rounded-xl focus:outline-hidden" href="../../pro/shop-marketplace/product-detail.html">
-                <img class="size-full absolute inset-0 object-cover object-center group-hover:scale-105 group-focus:scale-105 transition-transform duration-500 ease-in-out rounded-xl" src="{{ asset('assets/img/product/ADIDAS-F34RUADI5-ADIKI9873-White 01-.webp') }}" alt="Product Image">
-              </a>
-            </div>
-
-            <a class="after:z-1 after:absolute after:inset-0" href="../../pro/shop-marketplace/product-detail.html"></a>
-
-            <div class="pt-3">
-              <h4 class="font-medium text-sm text-gray-800 dark:text-neutral-200 capitalize">
-                fx adizero evo sl - off white aurora coffee met
-              </h4>
-              <div class="mt-1 flex flex-wrap items-center gap-1">
-                <span class="font-semibold text-emerald-600 dark:text-emerald-500">
-                  Rp <span class="text-sm">2.500.000</span>
-                </span>
-                <span class="ms-auto text-sm text-gray-500 dark:text-neutral-500">
-                  Adidas
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- End Card -->
-
-        <!-- Card -->
-        <div class="h-full flex flex-col">
-          <div class="group relative">
-            <div class="relative">
-              <a class="block shrink-0 relative w-full h-48 md:h-64 overflow-hidden rounded-xl focus:outline-hidden" href="../../pro/shop-marketplace/product-detail.html">
-                <img class="size-full absolute inset-0 object-cover object-center group-hover:scale-105 group-focus:scale-105 transition-transform duration-500 ease-in-out rounded-xl" src="{{ asset('assets/img/product/ON-FFSSBONR5-ONRM10100264-Black 01-.webp') }}" alt="Product Image">
-              </a>
-            </div>
-
-            <a class="after:z-1 after:absolute after:inset-0" href="../../pro/shop-marketplace/product-detail.html"></a>
-
-            <div class="pt-3">
-              <h4 class="font-medium text-sm text-gray-800 dark:text-neutral-200 capitalize">
-                on cloudtilt men's sneakers shoes - eclipse black
-              </h4>
-              <div class="mt-1 flex flex-wrap items-center gap-1">
-                <span class="font-semibold text-emerald-600 dark:text-emerald-500">
-                  Rp <span class="text-sm">2.800.000</span>
-                </span>
-                <span class="ms-auto text-sm text-gray-500 dark:text-neutral-500">
-                  On Cloud
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- End Card -->
-
-        <!-- Card -->
-        <div class="h-full flex flex-col">
-          <div class="group relative">
-            <div class="relative">
-              <a class="block shrink-0 relative w-full h-48 md:h-64 overflow-hidden rounded-xl focus:outline-hidden" href="../../pro/shop-marketplace/product-detail.html">
-                <img class="size-full absolute inset-0 object-cover object-center group-hover:scale-105 group-focus:scale-105 transition-transform duration-500 ease-in-out rounded-xl" src="{{ asset('assets/img/product/NIKE-F34KBNIK5-NIKIW3808400-Navy 01-.webp') }}" alt="Product Image">
-              </a>
-            </div>
-
-            <a class="after:z-1 after:absolute after:inset-0" href="../../pro/shop-marketplace/product-detail.html"></a>
-
-            <div class="pt-3">
-              <h4 class="font-medium text-sm text-gray-800 dark:text-neutral-200 capitalize">
-                air jordan 13 retro - navy university blue flint
-              </h4>
-              <div class="mt-1 flex flex-wrap items-center gap-1">
-                <span class="font-semibold text-emerald-600 dark:text-emerald-500">
-                  Rp <span class="text-sm">3.269.000</span>
-                </span>
-                <span class="ms-auto text-sm text-gray-500 dark:text-neutral-500">
-                  Nike
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- End Card -->
-
-
-      </div>
-      <!-- End Grid -->
+        <!-- End Grid -->
     </div>
     <!-- End Featured -->
 
