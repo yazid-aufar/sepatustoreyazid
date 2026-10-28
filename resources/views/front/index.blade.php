@@ -426,7 +426,7 @@
         <!-- End Carousel -->
       </div>
     </div>
-    <!-- End Featured -->
+    <!-- End Catgory -->
 
     <!-- Featured -->
     <div class="py-6 sm:py-12 w-full max-w-[85rem] px-4 sm:px-6 lg:px-8 mx-auto">
@@ -594,7 +594,7 @@
     </div>
     <!-- End Featured -->
 
-    <!-- Clients -->
+    <!-- Brands -->
     <div class="py-6 sm:py-12 w-full max-w-[85rem] mx-auto px-4 sm:px-6 lg:px-8">
       <!-- Header -->
       <div class="mb-4">
@@ -634,6 +634,7 @@
       </div>
       <!-- End Grid -->
     </div>
+    <!-- End Brands -->
 
     <!-- Explore Interests -->
     <div class="py-6 sm:py-12 w-full max-w-[85rem] px-4 sm:px-6 lg:px-8 mx-auto">
