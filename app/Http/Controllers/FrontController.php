@@ -20,8 +20,9 @@ class FrontController extends Controller
 
     public function index()
     {
-        $data = $this->frontService->getFrontPageData();
-        return view('front.index', $data);
+        // $data = $this->frontService->getFrontPageData();
+        // return view('front.index', $data);
+        return view('front.index');
     }
 
     public function details(Shoe $shoe) // Route model binding for the Shoe model
