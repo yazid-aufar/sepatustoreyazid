@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Repositories\Contracts\CategoryRepositoryInterface;
 use App\Repositories\Contracts\ShoeRepositoryInterface;
+use App\Models\Brand;
 
 class FrontService
 {
@@ -26,9 +27,9 @@ class FrontService
     {
         $categories = $this->categoryRepository->getAllCategories();
         $popularShoes = $this->shoeRepository->getPopularShoes(5);
-        // $newShoes = $this->shoeRepository->getAllNewShoes();
+        $brands = Brand::orderBy('name')->get();
+        $newShoes = $this->shoeRepository->getAllNewShoes();
 
-        return compact('categories', 'popularShoes');
-        // return compact('categories', 'popularShoes', 'newShoes');
+        return compact('categories', 'popularShoes', 'brands', 'newShoes');
     }
 }

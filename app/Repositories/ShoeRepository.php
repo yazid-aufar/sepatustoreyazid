@@ -22,7 +22,11 @@ class ShoeRepository implements ShoeRepositoryInterface
 
     public function getAllNewShoes()
     {
-        return Shoe::latest()->get();
+        return Shoe::with('brand')
+            ->latest('created_at')
+            ->orderByDesc('id')
+            ->take(10)
+            ->get();
     }
 
     public function find($id)
