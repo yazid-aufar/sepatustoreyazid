@@ -25,9 +25,10 @@ class FrontService
     public function getFrontPageData()
     {
         $categories = $this->categoryRepository->getAllCategories();
-        $popularShoes = $this->shoeRepository->getAllPopularShoes(4);
-        $newShoes = $this->shoeRepository->getAllNewShoes();
+        // $popularShoes = $this->shoeRepository->getAllPopularShoes(4);
+        // $newShoes = $this->shoeRepository->getAllNewShoes();
 
-        return compact('categories', 'popularShoes', 'newShoes');
+        return compact('categories');
+        // return compact('categories', 'popularShoes', 'newShoes');
     }
 }

@@ -385,88 +385,45 @@
       </div>
       <!-- End Header -->
 
-      <!-- Carousel -->
-      <div class="hs-carousel w-full overflow-hidden">
-        <div class="hs-carousel w-full">
-          <div class="hs-carousel-body flex flex-nowrap gap-2 sm:gap-4 transition-transform duration-700 cursor-grab select-none">
-            <div class="hs-carousel-slide">
-              <!-- Category Card -->
-              <a class="block flex items-center bg-white border border-gray-200 hover:border-gray-300 rounded-xl focus:outline-hidden focus:border-gray-300 dark:bg-neutral-900 dark:border-neutral-700 dark:hover:border-neutral-600 dark:focus:border-neutral-600" href="../../pro/shop-marketplace/listing.html">
-                <div class="relative shrink-0 w-20 sm:w-28 h-20">
-                  <img class="size-full absolute inset-0 object-cover object-center rounded-s-xl" src="{{ asset('assets/img/category/running.jpg') }}" alt="Product Image">
-                </div>
-                <div class="grow p-3">
-                  <span class="block font-medium text-sm text-gray-800 dark:text-neutral-200">
-                    Running
-                  </span>
-                </div>
-              </a>
-              <!-- End Category Card -->
-            </div>
+        <!-- Carousel -->
+        <div class="hs-carousel w-full overflow-hidden">
+          <div class="hs-carousel w-full">
+            <div class="hs-carousel-body flex flex-nowrap gap-2 sm:gap-4 transition-transform duration-700 cursor-grab select-none">
+              @php
+                $categoryDisk = \Illuminate\Support\Facades\Storage::disk();
+              @endphp
 
-            <div class="hs-carousel-slide">
-              <!-- Category Card -->
-              <a class="block flex items-center bg-white border border-gray-200 hover:border-gray-300 rounded-xl focus:outline-hidden focus:border-gray-300 dark:bg-neutral-900 dark:border-neutral-700 dark:hover:border-neutral-600 dark:focus:border-neutral-600" href="../../pro/shop-marketplace/listing.html">
-                <div class="relative shrink-0 w-20 sm:w-28 h-20">
-                  <img class="size-full absolute inset-0 object-cover object-center rounded-s-xl" src="{{ asset('assets/img/category/soccer.jpg') }}" alt="Product Image">
+              @forelse ($categories as $category)
+                <div class="hs-carousel-slide">
+                  <!-- Category Card -->
+                  <a class="block flex items-center bg-white border border-gray-200 hover:border-gray-300 rounded-xl focus:outline-hidden focus:border-gray-300 dark:bg-neutral-900 dark:border-neutral-700 dark:hover:border-neutral-600 dark:focus:border-neutral-600" href="{{ route('front.category', ['category' => $category->slug]) }}">
+                    <div class="relative shrink-0 w-20 sm:w-28 h-20">
+                      <img
+                        class="size-full absolute inset-0 object-cover object-center rounded-s-xl"
+                        src="{{ $categoryDisk->providesTemporaryUrls()
+                          ? $categoryDisk->temporaryUrl($category->icon, now()->addHour())
+                          : $categoryDisk->url($category->icon) }}"
+                        alt="{{ $category->name }}"
+                        loading="lazy"
+                      >
+                    </div>
+                    <div class="grow p-3">
+                      <span class="block font-medium text-sm text-gray-800 dark:text-neutral-200">
+                        {{ $category->name }}
+                      </span>
+                    </div>
+                  </a>
+                  <!-- End Category Card -->
                 </div>
-                <div class="grow p-3">
-                  <span class="block font-medium text-sm text-gray-800 dark:text-neutral-200">
-                    Soccer
-                  </span>
-                </div>
-              </a>
-              <!-- End Category Card -->
-            </div>
-
-            <div class="hs-carousel-slide">
-              <!-- Category Card -->
-              <a class="block flex items-center bg-white border border-gray-200 hover:border-gray-300 rounded-xl focus:outline-hidden focus:border-gray-300 dark:bg-neutral-900 dark:border-neutral-700 dark:hover:border-neutral-600 dark:focus:border-neutral-600" href="../../pro/shop-marketplace/listing.html">
-                <div class="relative shrink-0 w-20 sm:w-28 h-20">
-                  <img class="size-full absolute inset-0 object-cover object-center rounded-s-xl" src="{{ asset('assets/img/category/badminton.jpg') }}" alt="Product Image">
-                </div>
-                <div class="grow p-3">
-                  <span class="block font-medium text-sm text-gray-800 dark:text-neutral-200">
-                    Badminton
-                  </span>
-                </div>
-              </a>
-              <!-- End Category Card -->
-            </div>
-
-            <div class="hs-carousel-slide">
-              <!-- Category Card -->
-              <a class="block flex items-center bg-white border border-gray-200 hover:border-gray-300 rounded-xl focus:outline-hidden focus:border-gray-300 dark:bg-neutral-900 dark:border-neutral-700 dark:hover:border-neutral-600 dark:focus:border-neutral-600" href="../../pro/shop-marketplace/listing.html">
-                <div class="relative shrink-0 w-20 sm:w-28 h-20">
-                  <img class="size-full absolute inset-0 object-cover object-center rounded-s-xl" src="{{ asset('assets/img/category/sneakers.jpg') }}" alt="Product Image">
-                </div>
-                <div class="grow p-3">
-                  <span class="block font-medium text-sm text-gray-800 dark:text-neutral-200">
-                    Sneakers
-                  </span>
-                </div>
-              </a>
-              <!-- End Category Card -->
-            </div>
-
-            <div class="hs-carousel-slide">
-              <!-- Category Card -->
-              <a class="block flex items-center bg-white border border-gray-200 hover:border-gray-300 rounded-xl focus:outline-hidden focus:border-gray-300 dark:bg-neutral-900 dark:border-neutral-700 dark:hover:border-neutral-600 dark:focus:border-neutral-600" href="../../pro/shop-marketplace/listing.html">
-                <div class="relative shrink-0 w-20 sm:w-28 h-20">
-                  <img class="size-full absolute inset-0 object-cover object-center rounded-s-xl" src="{{ asset('assets/img/category/basketball.jpg') }}" alt="Product Image">
-                </div>
-                <div class="grow p-3">
-                  <span class="block font-medium text-sm text-gray-800 dark:text-neutral-200">
-                    Basketball
-                  </span>
-                </div>
-              </a>
-              <!-- End Category Card -->
+              @empty
+                <p class="w-full py-4 text-sm text-gray-500 dark:text-neutral-400">
+                  Belum ada kategori tersedia.
+                </p>
+              @endforelse
             </div>
           </div>
         </div>
-      </div>
-      <!-- End Carousel -->
+        <!-- End Carousel -->
       </div>
     </div>
     <!-- End Featured -->
