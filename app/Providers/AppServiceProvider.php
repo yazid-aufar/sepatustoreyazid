@@ -10,6 +10,8 @@ use App\Repositories\Contracts\ShoeRepositoryInterface;
 use App\Repositories\OrderRepository;
 use App\Repositories\PromoCodeRepository;
 use App\Repositories\ShoeRepository;
+use App\Repositories\BrandRepository;
+use App\Repositories\Contracts\BrandRepositoryInterface;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -27,6 +29,8 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(OrderRepositoryInterface::class, OrderRepository::class);
 
         $this->app->singleton(PromoCodeRepositoryInterface::class, PromoCodeRepository::class);
+
+        $this->app->singleton(BrandRepositoryInterface::class, BrandRepository::class);
     }
 
     /**
