@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreOrderRequest extends FormRequest
 {
@@ -22,10 +23,22 @@ class StoreOrderRequest extends FormRequest
      */
     public function rules(): array
     {
+        $shoe = $this->route('shoe');
+
         return [
-            //
-            'shoe_size' => ['required', 'string', 'max:255'],
-            'size_id' => ['required', 'integer', 'min:1'],
+            'size_id' => [
+                'required',
+                'integer',
+                Rule::exists('shoe_sizes', 'id')
+                    ->where('shoe_id', $shoe->id)
+                    ->whereNull('deleted_at'),
+            ],
+            'quantity' => [
+                'required',
+                'integer',
+                'min:1',
+                'max:' . $shoe->stock,
+            ],
         ];
     }
 }

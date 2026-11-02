@@ -24,11 +24,14 @@ class OrderController extends Controller
     {
         $validated = $request->validated();
 
+        $size = $shoe->sizes()->findOrFail($validated['size_id']);
+
         $validated['shoe_id'] = $shoe->id;
+        $validated['shoe_size'] = $size->size;
 
         $this->orderService->beginOrder($validated);
 
-        return redirect()->route('front.booking', $shoe->slug);
+        return redirect()->route('front.booking');
     }
 
     public function booking()
