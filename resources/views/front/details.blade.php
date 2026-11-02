@@ -1,39 +1,69 @@
+{{--
+    Halaman detail produk Sepatu Store.
+    FrontController mengirim $shoe dan data getFrontPageData():
+    $popularShoes, $categories, dan $brands.
+    Validasi kepemilikan ukuran dan stok tetap dilakukan di server.
+--}}
+@php
+    $storageDisk = \Illuminate\Support\Facades\Storage::disk();
+    $storageUrl = static function ($path) use ($storageDisk) {
+        if (! $path) {
+            return null;
+        }
+
+        return $storageDisk->providesTemporaryUrls()
+            ? $storageDisk->temporaryUrl($path, now()->addHour())
+            : $storageDisk->url($path);
+    };
+
+    $galleryImages = collect([$shoe->thumbnail])
+        ->merge($shoe->photos->pluck('photo'))
+        ->filter()
+        ->unique()
+        ->values();
+
+    $popularShoes = collect($popularShoes ?? [])
+        ->reject(fn ($item) => (string) $item->id === (string) $shoe->id);
+    $categories = collect($categories ?? []);
+    $brands = collect($brands ?? []);
+    $canOrder = (int) $shoe->stock > 0 && $shoe->sizes->isNotEmpty();
+    $selectedSize = $shoe->sizes->firstWhere('id', old('size_id'));
+    $pageDescription = \Illuminate\Support\Str::limit(strip_tags((string) $shoe->about), 160);
+@endphp
 <!DOCTYPE html>
-<html lang="en" class="relative min-h-full scroll-smooth">
+<html lang="id" class="relative min-h-full scroll-smooth">
 <head>
   <!-- Required Meta Tags Always Come First -->
   <meta charset="utf-8">
   <meta name="robots" content="max-snippet:-1, max-image-preview:large, max-video-preview:-1">
-  <link rel="canonical" href="https://preline.co/">
+  <link rel="canonical" href="{{ route('front.details', ['shoe' => $shoe->slug]) }}">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="A modern eCommerce template for multi-vendor stores with an advanced Mega Menu, filtering, and seamless browsing.">
+  <meta name="description" content="{{ $pageDescription }}">
 
-  <meta name="twitter:site" content="@preline">
-  <meta name="twitter:creator" content="@preline">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Shop Product Detail | Preline Pro | Preline UI, crafted with Tailwind CSS">
-  <meta name="twitter:description" content="A modern eCommerce template for multi-vendor stores with an advanced Mega Menu, filtering, and seamless browsing.">
-  <meta name="twitter:image" content="https://preline.co/assets/img/og-image.png">
+  <meta name="twitter:title" content="{{ $shoe->name }} — Sepatu Store">
+  <meta name="twitter:description" content="{{ $pageDescription }}">
+  <meta name="twitter:image" content="{{ $storageUrl($shoe->thumbnail) }}">
 
-  <meta property="og:url" content="https://preline.co/">
-  <meta property="og:locale" content="en_US">
-  <meta property="og:type" content="website">
-  <meta property="og:site_name" content="Preline">
-  <meta property="og:title" content="Shop Product Detail | Preline Pro | Preline UI, crafted with Tailwind CSS">
-  <meta property="og:description" content="A modern eCommerce template for multi-vendor stores with an advanced Mega Menu, filtering, and seamless browsing.">
-  <meta property="og:image" content="https://preline.co/assets/img/og-image.png">
+  <meta property="og:url" content="{{ route('front.details', ['shoe' => $shoe->slug]) }}">
+  <meta property="og:locale" content="id_ID">
+  <meta property="og:type" content="product">
+  <meta property="og:site_name" content="Sepatu Store">
+  <meta property="og:title" content="{{ $shoe->name }} — Sepatu Store">
+  <meta property="og:description" content="{{ $pageDescription }}">
+  <meta property="og:image" content="{{ $storageUrl($shoe->thumbnail) }}">
 
   <!-- Title -->
-  <title>Shop Product Detail | Preline Pro | Preline UI, crafted with Tailwind CSS</title>
+  <title>{{ $shoe->name }} — Sepatu Store</title>
 
   <!-- Favicon -->
-  <link rel="shortcut icon" href="../favicon.ico">
+  <link rel="shortcut icon" href="{{ asset('favicon.ico') }}">
 
   <!-- Font -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
   <!-- CSS HS -->
-  <link rel="stylesheet" href="../assets/css/main.min.css?v=3.0.1">
+  <link rel="stylesheet" href="{{ asset('assets/css/main.min.css?v=3.0.1') }}">
 
   <!-- Theme Check and Update -->
   <script>
@@ -67,7 +97,7 @@
         <ul class="flex flex-wrap items-center gap-3">
           <li class="inline-flex items-center relative text-xs text-gray-500 ps-3.5 first:ps-0 first:after:hidden after:absolute after:top-1/2 after:start-0 after:inline-block after:w-px after:h-2.5 after:bg-gray-400 after:rounded-full after:-translate-y-1/2 after:rotate-12 dark:text-neutral-500 dark:after:bg-neutral-600">
             <button type="button" class="flex items-center gap-x-1.5 text-start text-xs text-gray-500 hover:text-gray-800 focus:outline-hidden focus:text-gray-800 dark:text-neutral-200 dark:hover:text-neutral-400 dark:focus:text-neutral-400" data-hs-overlay="#hs-pro-shmnrsm">
-              <img class="shrink-0 size-3.5 rounded-full" src="../assets/vendor/svg-country-flags/png250px/us.png" alt="English">
+              <img class="shrink-0 size-3.5 rounded-full" src="{{ asset('assets/vendor/svg-country-flags/png250px/us.png') }}" alt="English">
               English · USD
             </button>
           </li>
@@ -106,7 +136,7 @@
         <div class="order-1 md:w-auto flex items-center gap-x-1">
           <div class="hidden sm:block">
             <!-- Logo -->
-            <a class="flex-none rounded-md text-xl inline-block font-semibold focus:outline-hidden focus:opacity-80" href="../../pro/shop-marketplace/index.html" aria-label="Preline">
+            <a class="flex-none rounded-md text-xl inline-block font-semibold focus:outline-hidden focus:opacity-80" href="{{ route('front.index') }}" aria-label="Preline">
               <svg
                 class="h-auto"
                 width="196"
@@ -151,7 +181,7 @@
             <!-- End Logo -->
           </div>
           <div class="sm:hidden">
-            <a class="flex-none rounded-md text-xl inline-block font-semibold focus:outline-hidden focus:opacity-80" href="../../pro/shop-marketplace/index.html" aria-label="Preline">
+            <a class="flex-none rounded-md text-xl inline-block font-semibold focus:outline-hidden focus:opacity-80" href="{{ route('front.index') }}" aria-label="Preline">
               <svg class="w-[31px] h-auto" width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path fill-rule="evenodd" clip-rule="evenodd" d="M18.0835 3.23358C9.88316 3.23358 3.23548 9.8771 3.23548 18.0723V35.5832H0.583496V18.0723C0.583496 8.41337 8.41851 0.583252 18.0835 0.583252C27.7485 0.583252 35.5835 8.41337 35.5835 18.0723C35.5835 27.7312 27.7485 35.5614 18.0835 35.5614H16.7357V32.911H18.0835C26.2838 32.911 32.9315 26.2675 32.9315 18.0723C32.9315 9.8771 26.2838 3.23358 18.0835 3.23358Z" class="fill-emerald-600 dark:fill-emerald-500" fill="currentColor" />
                 <path fill-rule="evenodd" clip-rule="evenodd" d="M18.0833 8.62162C12.8852 8.62162 8.62666 12.9245 8.62666 18.2879V35.5833H5.97468V18.2879C5.97468 11.5105 11.3713 5.97129 18.0833 5.97129C24.7954 5.97129 30.192 11.5105 30.192 18.2879C30.192 25.0653 24.7954 30.6045 18.0833 30.6045H16.7355V27.9542H18.0833C23.2815 27.9542 27.54 23.6513 27.54 18.2879C27.54 12.9245 23.2815 8.62162 18.0833 8.62162Z" class="fill-emerald-600 dark:fill-emerald-500" fill="currentColor" />
@@ -1587,18 +1617,19 @@
       <div class="pt-6">
         <div class="-ms-1.5 pb-3">
           <!-- Breadcrumb -->
-          <ol class=" flex items-center whitespace-nowrap">
-            <li class="flex items-center">
-
-              <a class="py-0.5 px-1.5 flex items-center gap-x-1 text-sm rounded-md text-gray-600 hover:bg-gray-100 focus:bg-gray-100 focus:outline-hidden dark:text-neutral-400 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800" href="listing.html">
-                Sneakers
-              </a>
-              <svg class="shrink-0 overflow-visible size-4  text-gray-400 dark:text-neutral-600" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                <path d="M6 13L10 3" stroke="currentColor" stroke-linecap="round"></path>
-              </svg>
-            </li>
-            <li class="capitalize ps-1.5 flex items-center truncate font-semibold text-gray-800 dark:text-neutral-200 text-sm truncate">
-              <span class="truncate">air jordan 1 low - obsidian university gold</span>
+          <ol class="flex items-center whitespace-nowrap">
+            @if ($shoe->category)
+              <li class="flex items-center">
+                <a class="py-0.5 px-1.5 flex items-center gap-x-1 text-sm rounded-md text-gray-600 hover:bg-gray-100 focus:bg-gray-100 focus:outline-hidden dark:text-neutral-400 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800" href="{{ route('front.category', ['category' => $shoe->category->slug]) }}">
+                  {{ $shoe->category->name }}
+                </a>
+                <svg class="shrink-0 overflow-visible size-4 text-gray-400 dark:text-neutral-600" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                  <path d="M6 13L10 3" stroke="currentColor" stroke-linecap="round"></path>
+                </svg>
+              </li>
+            @endif
+            <li class="capitalize ps-1.5 flex items-center truncate font-semibold text-gray-800 dark:text-neutral-200 text-sm" aria-current="page">
+              <span class="truncate">{{ $shoe->name }}</span>
             </li>
           </ol>
           <!-- End Breadcrumb -->
@@ -1608,29 +1639,16 @@
         <div class="grid grid-cols-1 lg:grid-cols-5 gap-y-10">
           <div class="lg:col-span-3">
             <!-- Slider -->
-            <div data-product-gallery data-hs-carousel='{
-                "loadingClasses": "opacity-0",
-                "isInfiniteLoop": true
-              }' class="relative">
+            <div data-product-gallery class="relative">
               <div class="hs-carousel flex flex-col sm:flex-row gap-3 sm:gap-5">
                 <!-- Thumbnails -->
                 <div class="flex-none order-2 sm:order-1">
                   <div class="hs-carousel-pagination sm:h-175 flex flex-row sm:flex-col gap-3 pb-1.5 sm:pb-0 overflow-x-auto sm:overflow-x-hidden sm:overflow-y-auto [&::-webkit-scrollbar]:h-1 sm:[&::-webkit-scrollbar]:hidden [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 dark:[&::-webkit-scrollbar-track]:bg-neutral-700 dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500">
-                    <div class="hs-carousel-pagination-item relative shrink-0 size-20 rounded-md sm:rounded-lg overflow-hidden cursor-pointer after:absolute after:inset-0 after:size-full after:rounded-md sm:after:rounded-lg border border-gray-200 hs-carousel-active:border-gray-800 hs-carousel-active:after:bg-black/10 dark:hs-carousel-active:border-white dark:border-neutral-700">
-                      <img class="bg-gray-100 size-full object-cover rounded-md sm:rounded-lg dark:bg-neutral-800" src="../assets/img/product/NIKE-F34KBNIK5-NIKIO7448400-Navy 01-.webp" alt="Air Jordan 1 Low thumbnail 1">
-                    </div>
-                    <div class="hs-carousel-pagination-item relative shrink-0 size-20 rounded-md sm:rounded-lg overflow-hidden cursor-pointer after:absolute after:inset-0 after:size-full after:rounded-md sm:after:rounded-lg border border-gray-200 hs-carousel-active:border-gray-800 hs-carousel-active:after:bg-black/10 dark:hs-carousel-active:border-white dark:border-neutral-700">
-                      <img class="bg-gray-100 size-full object-cover rounded-md sm:rounded-lg dark:bg-neutral-800" src="../assets/img/product/NIKE-F34KBNIK5-NIKIO7448400-Navy 02-.webp" alt="Air Jordan 1 Low thumbnail 2">
-                    </div>
-                    <div class="hs-carousel-pagination-item relative shrink-0 size-20 rounded-md sm:rounded-lg overflow-hidden cursor-pointer after:absolute after:inset-0 after:size-full after:rounded-md sm:after:rounded-lg border border-gray-200 hs-carousel-active:border-gray-800 hs-carousel-active:after:bg-black/10 dark:hs-carousel-active:border-white dark:border-neutral-700">
-                      <img class="bg-gray-100 size-full object-cover rounded-md sm:rounded-lg dark:bg-neutral-800" src="../assets/img/product/NIKE-F34KBNIK5-NIKIO7448400-Navy 03-.webp" alt="Air Jordan 1 Low thumbnail 3">
-                    </div>
-                    <div class="hs-carousel-pagination-item relative shrink-0 size-20 rounded-md sm:rounded-lg overflow-hidden cursor-pointer after:absolute after:inset-0 after:size-full after:rounded-md sm:after:rounded-lg border border-gray-200 hs-carousel-active:border-gray-800 hs-carousel-active:after:bg-black/10 dark:hs-carousel-active:border-white dark:border-neutral-700">
-                      <img class="bg-gray-100 size-full object-cover rounded-md sm:rounded-lg dark:bg-neutral-800" src="../assets/img/product/NIKE-F34KBNIK5-NIKIO7448400-Navy 04-.webp" alt="Air Jordan 1 Low thumbnail 4">
-                    </div>
-                    <div class="hs-carousel-pagination-item relative shrink-0 size-20 rounded-md sm:rounded-lg overflow-hidden cursor-pointer after:absolute after:inset-0 after:size-full after:rounded-md sm:after:rounded-lg border border-gray-200 hs-carousel-active:border-gray-800 hs-carousel-active:after:bg-black/10 dark:hs-carousel-active:border-white dark:border-neutral-700">
-                      <img class="bg-gray-100 size-full object-cover rounded-md sm:rounded-lg dark:bg-neutral-800" src="../assets/img/product/NIKE-F34KBNIK5-NIKIO7448400-Navy 05-.webp" alt="Air Jordan 1 Low thumbnail 5">
-                    </div>
+                    @foreach ($galleryImages as $imagePath)
+                      <button type="button" class="hs-carousel-pagination-item relative shrink-0 size-20 rounded-md sm:rounded-lg overflow-hidden cursor-pointer after:absolute after:inset-0 after:size-full after:rounded-md sm:after:rounded-lg border border-gray-200 hs-carousel-active:border-gray-800 hs-carousel-active:after:bg-black/10 dark:hs-carousel-active:border-white dark:border-neutral-700" aria-label="Tampilkan foto {{ $loop->iteration }}">
+                        <img class="bg-gray-100 size-full object-cover rounded-md sm:rounded-lg dark:bg-neutral-800" src="{{ $storageUrl($imagePath) }}" alt="{{ $shoe->name }} — thumbnail {{ $loop->iteration }}">
+                      </button>
+                    @endforeach
                   </div>
                 </div>
                 <!-- End Thumbnails -->
@@ -1638,21 +1656,15 @@
                 <!-- Preview -->
                 <div class="relative group grow overflow-hidden h-137.5 sm:h-175 order-1 sm:order-2 bg-gray-100 rounded-lg dark:bg-neutral-800">
                   <div class="hs-carousel-body absolute inset-y-0 start-0 flex flex-nowrap transition-transform duration-500 ease-out">
-                    <div class="hs-carousel-slide">
-                      <img class="bg-gray-100 size-full object-cover rounded-lg dark:bg-neutral-800" src="../assets/img/product/NIKE-F34KBNIK5-NIKIO7448400-Navy 01-.webp" alt="Air Jordan 1 Low image 1">
-                    </div>
-                    <div class="hs-carousel-slide">
-                      <img class="bg-gray-100 size-full object-cover rounded-lg dark:bg-neutral-800" src="../assets/img/product/NIKE-F34KBNIK5-NIKIO7448400-Navy 02-.webp" alt="Air Jordan 1 Low image 2">
-                    </div>
-                    <div class="hs-carousel-slide">
-                      <img class="bg-gray-100 size-full object-cover rounded-lg dark:bg-neutral-800" src="../assets/img/product/NIKE-F34KBNIK5-NIKIO7448400-Navy 03-.webp" alt="Air Jordan 1 Low image 3">
-                    </div>
-                    <div class="hs-carousel-slide">
-                      <img class="bg-gray-100 size-full object-cover rounded-lg dark:bg-neutral-800" src="../assets/img/product/NIKE-F34KBNIK5-NIKIO7448400-Navy 04-.webp" alt="Air Jordan 1 Low image 4">
-                    </div>
-                    <div class="hs-carousel-slide">
-                      <img class="bg-gray-100 size-full object-cover rounded-lg dark:bg-neutral-800" src="../assets/img/product/NIKE-F34KBNIK5-NIKIO7448400-Navy 05-.webp" alt="Air Jordan 1 Low image 5">
-                    </div>
+                    @forelse ($galleryImages as $imagePath)
+                      <div class="hs-carousel-slide">
+                        <img class="bg-gray-100 size-full object-cover rounded-lg dark:bg-neutral-800" src="{{ $storageUrl($imagePath) }}" alt="{{ $shoe->name }} — foto {{ $loop->iteration }}">
+                      </div>
+                    @empty
+                      <div class="size-full flex items-center justify-center text-sm text-gray-500 dark:text-neutral-400">
+                        Foto produk belum tersedia.
+                      </div>
+                    @endforelse
                   </div>
 
                   <!-- Nav -->
@@ -1683,60 +1695,6 @@
 
 
 
-            <!-- Description -->
-            <div class="pt-14 pb-10">
-
-
-              <!-- Collapse -->
-              <div id="hs-shmldwhdcid-heading" class="hs-collapse hidden w-full overflow-hidden transition-[height] duration-300" aria-labelledby="hs-shmldwhdcid">
-                <!-- List -->
-                <div class="grid grid-cols-2 gap-x-2">
-                  <div class="py-1 relative overflow-hidden text-sm text-gray-500 text-end sm:text-start after:hidden sm:after:block after:absolute after:top-1/2 after:w-full after:mx-3 after:border-t after:border-dashed after:border-gray-200 dark:text-neutral-500 dark:border-neutral-700 dark:after:border-neutral-700">
-                    Item dimensions
-                  </div>
-                  <div class="py-1 text-sm text-gray-800 dark:text-neutral-200">
-                    L x W x H 0.07 x 0.35 x 0.07 inches
-                  </div>
-
-                  <div class="py-1 relative overflow-hidden text-sm text-gray-500 text-end sm:text-start after:hidden sm:after:block after:absolute after:top-1/2 after:w-full after:mx-3 after:border-t after:border-dashed after:border-gray-200 dark:text-neutral-500 dark:border-neutral-700 dark:after:border-neutral-700">
-                    Are Batteries Included
-                  </div>
-                  <div class="py-1 text-sm text-gray-800 dark:text-neutral-200">
-                    No
-                  </div>
-
-                  <div class="py-1 relative overflow-hidden text-sm text-gray-500 text-end sm:text-start after:hidden sm:after:block after:absolute after:top-1/2 after:w-full after:mx-3 after:border-t after:border-dashed after:border-gray-200 dark:text-neutral-500 dark:border-neutral-700 dark:after:border-neutral-700">
-                    Batteries Required?
-                  </div>
-                  <div class="py-1 text-sm text-gray-800 dark:text-neutral-200">
-                    No
-                  </div>
-
-                  <div class="py-1 relative overflow-hidden text-sm text-gray-500 text-end sm:text-start after:hidden sm:after:block after:absolute after:top-1/2 after:w-full after:mx-3 after:border-t after:border-dashed after:border-gray-200 dark:text-neutral-500 dark:border-neutral-700 dark:after:border-neutral-700">
-                    UPC
-                  </div>
-                  <div class="py-1 text-sm text-gray-800 dark:text-neutral-200">
-                    194253687870
-                  </div>
-
-                  <div class="py-1 relative overflow-hidden text-sm text-gray-500 text-end sm:text-start after:hidden sm:after:block after:absolute after:top-1/2 after:w-full after:mx-3 after:border-t after:border-dashed after:border-gray-200 dark:text-neutral-500 dark:border-neutral-700 dark:after:border-neutral-700">
-                    Global Trade Identification Number
-                  </div>
-                  <div class="py-1 text-sm text-gray-800 dark:text-neutral-200">
-                    30194253687871
-                  </div>
-                </div>
-                <!-- End List -->
-              </div>
-              <!-- End Collapse -->
-
-
-
-
-            </div>
-            <!-- End Description -->
-
-
             <!-- End Image with Text Pair -->
           </div>
           <!-- End Col -->
@@ -1751,7 +1709,7 @@
 
 
                 <h1 class="font-medium text-3xl text-gray-800 dark:text-neutral-200 capitalize">
-                  air jordan 1 low - obsidian university gold
+                  {{ $shoe->name }}
                 </h1>
 
 
@@ -1807,7 +1765,7 @@
                         <div class="flex flex-wrap justify-between items-center gap-1">
                           <div class="grow">
                             <span class="font-semibold text-3xl text-gray-800 dark:text-neutral-200">
-                              <span class="text-sm">Rp</span> 1.939.000
+                              <span class="text-sm">Rp</span> {{ number_format($shoe->price, 0, ',', '.') }}
                             </span>
                           </div>
 
@@ -1827,8 +1785,8 @@
                        <!-- Description List -->
                         <div class="mt-1 pt-1">
 
-                          <p class="mt-3 sm:mt-5 text-sm sm:text-base text-gray-500 dark:text-neutral-500">
-                            With an iconic design that pairs perfectly with any 'fit, these kicks ensure you'll always be on point. Encapsulated Air-Sole unit provides lightweight cushioning.
+                          <p class="mt-3 sm:mt-5 text-sm sm:text-base text-gray-500 dark:text-neutral-500" style="white-space: pre-line;">
+                            {{ $shoe->about }}
                           </p>
 
                         </div>
@@ -1836,7 +1794,9 @@
 
                         <!-- Card -->
                         <div class="h-full flex items-center gap-x-3 mt-3 sm:mt-5">
-                            <img class="shrink-0 size-12 object-contain p-1 bg-gray-100 rounded-lg dark:bg-neutral-800" src="../assets/img/brand/nike.webp" alt="Nike Logo">
+                            @if ($shoe->brand?->logo)
+                              <img class="shrink-0 size-12 object-contain p-1 bg-gray-100 rounded-lg dark:bg-neutral-800" src="{{ $storageUrl($shoe->brand->logo) }}" alt="{{ $shoe->brand->name }}">
+                            @endif
                             <div class="grow h-full flex flex-col">
                               <div>
                                 <!-- List -->
@@ -1854,7 +1814,7 @@
 
                                 <div class="flex flex-wrap items-center gap-1">
                                   <span class="flex items-center gap-1 font-semibold text-lg text-gray-800 dark:text-neutral-200">
-                                    Nike Indonesia
+                                    {{ $shoe->brand?->name ?? '-' }}
                                   </span>
 
 
@@ -1866,171 +1826,69 @@
                           </div>
                         <!-- End Card -->
 
-                        <!-- Size -->
-                        <div class="mt-6">
+                        <form id="shoe-order-form" method="POST" action="{{ route('front.save_order', ['shoe' => $shoe->slug]) }}">
+                          @csrf
+                          <input type="hidden" name="quantity" value="1">
+                          {{-- Kompatibel dengan StoreOrderRequest awal. Controller tetap menentukan ukuran dari size_id. --}}
+                          <input type="hidden" name="shoe_size" id="selected-shoe-size" value="{{ $selectedSize?->size ?? '' }}">
 
-                          <div class="flex flex-wrap justify-between items-center gap-3">
-                            <h2 class="font-medium text-gray-800 dark:text-neutral-200">
-                              Size
-                            </h2>
-
+                          <!-- Size -->
+                          <div class="mt-6">
+                            <div class="flex flex-wrap justify-between items-center gap-3">
+                              <h2 class="font-medium text-gray-800 dark:text-neutral-200">Size</h2>
+                              <span class="text-sm text-gray-500 dark:text-neutral-500">Stok: {{ $shoe->stock }}</span>
+                            </div>
+                            <div class="mt-2 grid grid-cols-4 gap-2">
+                              @forelse ($shoe->sizes as $size)
+                                <label for="shoe-size-{{ $size->id }}" class="p-2.5 group relative flex justify-center items-center gap-x-3 text-center text-xs bg-white text-gray-800 border border-gray-200 cursor-pointer rounded-lg dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-200
+                            has-checked:bg-emerald-100 dark:has-checked:bg-emerald-500/20
+                            has-checked:text-emerald-700 dark:has-checked:text-emerald-400
+                            has-checked:border-emerald-600 dark:has-checked:border-emerald-500
+                            has-checked:ring-1
+                            has-checked:ring-emerald-600 dark:has-checked:ring-emerald-500
+                            has-disabled:pointer-events-none
+                            has-disabled:text-gray-200 dark:has-disabled:text-neutral-700
+                            has-disabled:after:absolute
+                            has-disabled:after:inset-0
+                            has-disabled:after:bg-[linear-gradient(to_right_bottom,transparent_calc(50%-1px),var(--color-gray-200)_calc(50%-1px),var(--color-gray-200)_50%,transparent_50%)]
+                            dark:has-disabled:after:bg-[linear-gradient(to_right_bottom,transparent_calc(50%-1px),var(--color-neutral-700)_calc(50%-1px),var(--color-neutral-700)_50%,transparent_50%)]">
+                                  <input
+                                    type="radio"
+                                    id="shoe-size-{{ $size->id }}"
+                                    class="sr-only"
+                                    name="size_id"
+                                    value="{{ $size->id }}"
+                                    data-size="{{ $size->size }}"
+                                    @checked((string) old('size_id') === (string) $size->id)
+                                    @disabled(! $canOrder)
+                                    required
+                                  >
+                                  <span class="block">{{ $size->size }}</span>
+                                </label>
+                              @empty
+                                <p class="col-span-full text-sm text-gray-500 dark:text-neutral-400">Ukuran belum tersedia.</p>
+                              @endforelse
+                            </div>
+                            @error('size_id')
+                              <p class="mt-2 text-sm text-red-600" role="alert">{{ $message }}</p>
+                            @enderror
+                            @error('shoe_size')
+                              <p class="mt-2 text-sm text-red-600" role="alert">{{ $message }}</p>
+                            @enderror
+                            @error('quantity')
+                              <p class="mt-2 text-sm text-red-600" role="alert">{{ $message }}</p>
+                            @enderror
                           </div>
+                          <!-- End Size -->
 
-                          <!-- Grid -->
-                          <div class="mt-2 grid grid-cols-4 gap-2">
-                            <!-- Checkbox -->
-                            <label for="hs-pro-shfdsr-us-6and5" class="p-2.5 group relative flex justify-center items-center gap-x-3 text-center text-xs bg-white text-gray-800 border border-gray-200 cursor-pointer rounded-lg dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-200
-                            has-checked:bg-emerald-100 dark:has-checked:bg-emerald-500/20
-                            has-checked:text-emerald-700 dark:has-checked:text-emerald-400
-                            has-checked:border-emerald-600 dark:has-checked:border-emerald-500
-                            has-checked:ring-1
-                            has-checked:ring-emerald-600 dark:has-checked:ring-emerald-500
-                            has-disabled:pointer-events-none
-                            has-disabled:text-gray-200 dark:has-disabled:text-neutral-700
-                            has-disabled:after:absolute
-                            has-disabled:after:inset-0
-                            has-disabled:after:bg-[linear-gradient(to_right_bottom,transparent_calc(50%-1px),var(--color-gray-200)_calc(50%-1px),var(--color-gray-200)_50%,transparent_50%)]
-                            dark:has-disabled:after:bg-[linear-gradient(to_right_bottom,transparent_calc(50%-1px),var(--color-neutral-700)_calc(50%-1px),var(--color-neutral-700)_50%,transparent_50%)]">
-                              <input type="radio" id="hs-pro-shfdsr-us-6and5" class="hidden bg-transparent border-gray-200 text-emerald-700 focus:ring-white focus:ring-offset-0 dark:text-emerald-500 dark:border-neutral-700 dark:focus:ring-neutral-900" name="hs-pro-shfdsr">
-                              <span class="block">
-                                EU 40.5
-                              </span>
-                            </label>
-                            <!-- End Checkbox -->
-
-                            <!-- Checkbox -->
-                            <label for="hs-pro-shfdsr-us-7" class="p-2.5 group relative flex justify-center items-center gap-x-3 text-center text-xs bg-white text-gray-800 border border-gray-200 cursor-pointer rounded-lg dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-200
-                            has-checked:bg-emerald-100 dark:has-checked:bg-emerald-500/20
-                            has-checked:text-emerald-700 dark:has-checked:text-emerald-400
-                            has-checked:border-emerald-600 dark:has-checked:border-emerald-500
-                            has-checked:ring-1
-                            has-checked:ring-emerald-600 dark:has-checked:ring-emerald-500
-                            has-disabled:pointer-events-none
-                            has-disabled:text-gray-200 dark:has-disabled:text-neutral-700
-                            has-disabled:after:absolute
-                            has-disabled:after:inset-0
-                            has-disabled:after:bg-[linear-gradient(to_right_bottom,transparent_calc(50%-1px),var(--color-gray-200)_calc(50%-1px),var(--color-gray-200)_50%,transparent_50%)]
-                            dark:has-disabled:after:bg-[linear-gradient(to_right_bottom,transparent_calc(50%-1px),var(--color-neutral-700)_calc(50%-1px),var(--color-neutral-700)_50%,transparent_50%)]">
-                              <input type="radio" id="hs-pro-shfdsr-us-7" class="hidden bg-transparent border-gray-200 text-emerald-700 focus:ring-white focus:ring-offset-0 dark:text-emerald-500 dark:border-neutral-700 dark:focus:ring-neutral-900" name="hs-pro-shfdsr">
-                              <span class="block">
-                                EU 41
-                              </span>
-                            </label>
-                            <!-- End Checkbox -->
-
-                            <!-- Checkbox -->
-                            <label for="hs-pro-shfdsr-us-8" class="p-2.5 group relative flex justify-center items-center gap-x-3 text-center text-xs bg-white text-gray-800 border border-gray-200 cursor-pointer rounded-lg dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-200
-                            has-checked:bg-emerald-100 dark:has-checked:bg-emerald-500/20
-                            has-checked:text-emerald-700 dark:has-checked:text-emerald-400
-                            has-checked:border-emerald-600 dark:has-checked:border-emerald-500
-                            has-checked:ring-1
-                            has-checked:ring-emerald-600 dark:has-checked:ring-emerald-500
-                            has-disabled:pointer-events-none
-                            has-disabled:text-gray-200 dark:has-disabled:text-neutral-700
-                            has-disabled:after:absolute
-                            has-disabled:after:inset-0
-                            has-disabled:after:bg-[linear-gradient(to_right_bottom,transparent_calc(50%-1px),var(--color-gray-200)_calc(50%-1px),var(--color-gray-200)_50%,transparent_50%)]
-                            dark:has-disabled:after:bg-[linear-gradient(to_right_bottom,transparent_calc(50%-1px),var(--color-neutral-700)_calc(50%-1px),var(--color-neutral-700)_50%,transparent_50%)]">
-                              <input type="radio" id="hs-pro-shfdsr-us-8" class="hidden bg-transparent border-gray-200 text-emerald-700 focus:ring-white focus:ring-offset-0 dark:text-emerald-500 dark:border-neutral-700 dark:focus:ring-neutral-900" name="hs-pro-shfdsr">
-                              <span class="block">
-                                EU 42
-                              </span>
-                            </label>
-                            <!-- End Checkbox -->
-
-                            <!-- Checkbox -->
-                            <label for="hs-pro-shfdsr-us-9and5" class="p-2.5 group relative flex justify-center items-center gap-x-3 text-center text-xs bg-white text-gray-800 border border-gray-200 cursor-pointer rounded-lg dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-200
-                            has-checked:bg-emerald-100 dark:has-checked:bg-emerald-500/20
-                            has-checked:text-emerald-700 dark:has-checked:text-emerald-400
-                            has-checked:border-emerald-600 dark:has-checked:border-emerald-500
-                            has-checked:ring-1
-                            has-checked:ring-emerald-600 dark:has-checked:ring-emerald-500
-                            has-disabled:pointer-events-none
-                            has-disabled:text-gray-200 dark:has-disabled:text-neutral-700
-                            has-disabled:after:absolute
-                            has-disabled:after:inset-0
-                            has-disabled:after:bg-[linear-gradient(to_right_bottom,transparent_calc(50%-1px),var(--color-gray-200)_calc(50%-1px),var(--color-gray-200)_50%,transparent_50%)]
-                            dark:has-disabled:after:bg-[linear-gradient(to_right_bottom,transparent_calc(50%-1px),var(--color-neutral-700)_calc(50%-1px),var(--color-neutral-700)_50%,transparent_50%)]">
-                              <input type="radio" id="hs-pro-shfdsr-us-9and5" class="hidden bg-transparent border-gray-200 text-emerald-700 focus:ring-white focus:ring-offset-0 dark:text-emerald-500 dark:border-neutral-700 dark:focus:ring-neutral-900" name="hs-pro-shfdsr">
-                              <span class="block">
-                                EU 43
-                              </span>
-                            </label>
-                            <!-- End Checkbox -->
-
-                            <!-- Checkbox -->
-                            <label for="hs-pro-shfdsr-us-10and5" class="p-2.5 group relative flex justify-center items-center gap-x-3 text-center text-xs bg-white text-gray-800 border border-gray-200 cursor-pointer rounded-lg dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-200
-                            has-checked:bg-emerald-100 dark:has-checked:bg-emerald-500/20
-                            has-checked:text-emerald-700 dark:has-checked:text-emerald-400
-                            has-checked:border-emerald-600 dark:has-checked:border-emerald-500
-                            has-checked:ring-1
-                            has-checked:ring-emerald-600 dark:has-checked:ring-emerald-500
-                            has-disabled:pointer-events-none
-                            has-disabled:text-gray-200 dark:has-disabled:text-neutral-700
-                            has-disabled:after:absolute
-                            has-disabled:after:inset-0
-                            has-disabled:after:bg-[linear-gradient(to_right_bottom,transparent_calc(50%-1px),var(--color-gray-200)_calc(50%-1px),var(--color-gray-200)_50%,transparent_50%)]
-                            dark:has-disabled:after:bg-[linear-gradient(to_right_bottom,transparent_calc(50%-1px),var(--color-neutral-700)_calc(50%-1px),var(--color-neutral-700)_50%,transparent_50%)]">
-                              <input type="radio" id="hs-pro-shfdsr-us-10and5" class="hidden bg-transparent border-gray-200 text-emerald-700 focus:ring-white focus:ring-offset-0 dark:text-emerald-500 dark:border-neutral-700 dark:focus:ring-neutral-900" name="hs-pro-shfdsr">
-                              <span class="block">
-                                EU 44
-                              </span>
-                            </label>
-                            <!-- End Checkbox -->
-
-                            <!-- Checkbox -->
-                            <label for="hs-pro-shfdsr-us-11and5" class="p-2.5 group relative flex justify-center items-center gap-x-3 text-center text-xs bg-white text-gray-800 border border-gray-200 cursor-pointer rounded-lg dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-200
-                            has-checked:bg-emerald-100 dark:has-checked:bg-emerald-500/20
-                            has-checked:text-emerald-700 dark:has-checked:text-emerald-400
-                            has-checked:border-emerald-600 dark:has-checked:border-emerald-500
-                            has-checked:ring-1
-                            has-checked:ring-emerald-600 dark:has-checked:ring-emerald-500
-                            has-disabled:pointer-events-none
-                            has-disabled:text-gray-200 dark:has-disabled:text-neutral-700
-                            has-disabled:after:absolute
-                            has-disabled:after:inset-0
-                            has-disabled:after:bg-[linear-gradient(to_right_bottom,transparent_calc(50%-1px),var(--color-gray-200)_calc(50%-1px),var(--color-gray-200)_50%,transparent_50%)]
-                            dark:has-disabled:after:bg-[linear-gradient(to_right_bottom,transparent_calc(50%-1px),var(--color-neutral-700)_calc(50%-1px),var(--color-neutral-700)_50%,transparent_50%)]">
-                              <input type="radio" id="hs-pro-shfdsr-us-11and5" class="hidden bg-transparent border-gray-200 text-emerald-700 focus:ring-white focus:ring-offset-0 dark:text-emerald-500 dark:border-neutral-700 dark:focus:ring-neutral-900" name="hs-pro-shfdsr">
-                              <span class="block">
-                                EU 44.5
-                              </span>
-                            </label>
-                            <!-- End Checkbox -->
-
-                            <!-- Checkbox -->
-                            <label for="hs-pro-shfdsr-us-12" class="p-2.5 group relative flex justify-center items-center gap-x-3 text-center text-xs bg-white text-gray-800 border border-gray-200 cursor-pointer rounded-lg dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-200
-                            has-checked:bg-emerald-100 dark:has-checked:bg-emerald-500/20
-                            has-checked:text-emerald-700 dark:has-checked:text-emerald-400
-                            has-checked:border-emerald-600 dark:has-checked:border-emerald-500
-                            has-checked:ring-1
-                            has-checked:ring-emerald-600 dark:has-checked:ring-emerald-500
-                            has-disabled:pointer-events-none
-                            has-disabled:text-gray-200 dark:has-disabled:text-neutral-700
-                            has-disabled:after:absolute
-                            has-disabled:after:inset-0
-                            has-disabled:after:bg-[linear-gradient(to_right_bottom,transparent_calc(50%-1px),var(--color-gray-200)_calc(50%-1px),var(--color-gray-200)_50%,transparent_50%)]
-                            dark:has-disabled:after:bg-[linear-gradient(to_right_bottom,transparent_calc(50%-1px),var(--color-neutral-700)_calc(50%-1px),var(--color-neutral-700)_50%,transparent_50%)]">
-                              <input type="radio" id="hs-pro-shfdsr-us-12" class="hidden bg-transparent border-gray-200 text-emerald-700 focus:ring-white focus:ring-offset-0 dark:text-emerald-500 dark:border-neutral-700 dark:focus:ring-neutral-900" name="hs-pro-shfdsr">
-                              <span class="block">
-                                EU 46
-                              </span>
-                            </label>
-                            <!-- End Checkbox -->
+                          <!-- Button Group -->
+                          <div class="mt-5 flex flex-col gap-3">
+                            <button type="submit" class="py-3 px-4 w-full inline-flex justify-center items-center gap-x-1 text-sm font-medium rounded-full border border-transparent bg-emerald-600 text-white hover:bg-emerald-700 disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:bg-emerald-700 dark:bg-emerald-500 dark:hover:bg-emerald-600 dark:focus:bg-emerald-600" @disabled(! $canOrder)>
+                              {{ (int) $shoe->stock < 1 ? 'Stok habis' : ($shoe->sizes->isEmpty() ? 'Ukuran belum tersedia' : 'Buy now') }}
+                            </button>
                           </div>
-                          <!-- End Grid -->
-                        </div>
-                        <!-- End Size -->
-
-
-
-                        <!-- Button Group -->
-                        <div class="mt-5 flex flex-col gap-3">
-                          <a href="../../shop-marketplace/booking.html" class="py-3 px-4 w-full inline-flex justify-center items-center gap-x-1 text-sm font-medium rounded-full border border-transparent bg-emerald-600 text-white hover:bg-emerald-700 disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:bg-emerald-700 dark:bg-emerald-500 dark:hover:bg-emerald-600 dark:focus:bg-emerald-600">
-                            Buy now
-                          </a>
-                        </div>
-                        <!-- End Button Group -->
+                          <!-- End Button Group -->
+                        </form>
                       </div>
 
 
@@ -2054,167 +1912,32 @@
 
     <!-- Featured -->
     <div class="py-6 sm:py-12 w-full max-w-[85rem] px-4 sm:px-6 lg:px-8 mx-auto">
-      <!-- Header -->
       <div class="mb-4 flex flex-wrap justify-between items-center gap-3">
-        <h1 class="font-medium text-xl text-gray-800 dark:text-neutral-200">
-          Explore your Interests
-        </h1>
-
-        <button type="button" class="py-2 px-3 flex items-center text-sm text-start bg-gray-100 text-gray-800 rounded-full hover:bg-gray-200 disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:bg-gray-200 dark:bg-neutral-700 dark:text-neutral-200 dark:hover:bg-neutral-600 dark:focus:bg-neutral-600">
-          View all
-          <svg class="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <h2 class="font-medium text-xl text-gray-800 dark:text-neutral-200">Explore your Interests</h2>
+        <a href="{{ route('front.index') }}" class="py-2 px-3 flex items-center text-sm text-start bg-gray-100 text-gray-800 rounded-full hover:bg-gray-200 focus:outline-hidden dark:bg-neutral-700 dark:text-neutral-200 dark:hover:bg-neutral-600">View all
+            <svg class="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="m9 18 6-6-6-6" />
-          </svg>
-        </button>
+            </svg>
+        </a>
       </div>
-      <!-- End Header -->
-
-      <!-- Grid -->
       <div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-y-10 gap-x-4">
-
-        <!-- Card -->
-        <div class="h-full flex flex-col">
-          <div class="group relative">
-            <div class="relative">
-              <a class="block shrink-0 relative w-full h-48 md:h-64 overflow-hidden rounded-xl focus:outline-hidden" href="../../pro/shop-marketplace/product-detail.html">
-                <img class="size-full absolute inset-0 object-cover object-center group-hover:scale-105 group-focus:scale-105 transition-transform duration-500 ease-in-out rounded-xl" src="../assets/img/product/ADIDAS-FFSSBADI5-ADIHQ8708-Black 01-.webp" alt="Product Image">
-              </a>
+        @forelse ($popularShoes as $featuredShoe)
+          <a class="group h-full flex flex-col focus:outline-hidden" href="{{ route('front.details', ['shoe' => $featuredShoe->slug]) }}">
+            <div class="relative w-full h-48 md:h-64 overflow-hidden rounded-xl">
+              <img class="size-full absolute inset-0 object-cover object-center group-hover:scale-105 group-focus:scale-105 transition-transform duration-500 ease-in-out rounded-xl" src="{{ $storageUrl($featuredShoe->thumbnail) }}" alt="{{ $featuredShoe->name }}" loading="lazy">
             </div>
-
-            <a class="after:z-1 after:absolute after:inset-0" href="../../pro/shop-marketplace/product-detail.html"></a>
-
             <div class="pt-3">
-              <h4 class="font-medium text-sm text-gray-800 dark:text-neutral-200 capitalize">
-                Campus 00s Men's Sneakers - Core Black
-              </h4>
+              <h3 class="font-medium text-sm text-gray-800 dark:text-neutral-200 capitalize">{{ $featuredShoe->name }}</h3>
               <div class="mt-1 flex flex-wrap items-center gap-1">
-                <span class="font-semibold text-emerald-600 dark:text-emerald-500">
-                  Rp <span class="text-sm">1.700.000</span>
-                </span>
-                <span class="ms-auto text-sm text-gray-500 dark:text-neutral-500">
-                  Adidas
-                </span>
+                <span class="font-semibold text-emerald-600 dark:text-emerald-500">Rp <span class="text-sm">{{ number_format($featuredShoe->price, 0, ',', '.') }}</span></span>
+                <span class="ms-auto text-sm text-gray-500 dark:text-neutral-500">{{ $featuredShoe->brand?->name ?? '-' }}</span>
               </div>
             </div>
-          </div>
-        </div>
-        <!-- End Card -->
-
-        <!-- Card -->
-        <div class="h-full flex flex-col">
-          <div class="group relative">
-            <div class="relative">
-              <a class="block shrink-0 relative w-full h-48 md:h-64 overflow-hidden rounded-xl focus:outline-hidden" href="../../pro/shop-marketplace/product-detail.html">
-                <img class="size-full absolute inset-0 object-cover object-center group-hover:scale-105 group-focus:scale-105 transition-transform duration-500 ease-in-out rounded-xl" src="../assets/img/product/NIKE-F34KBNIK5-NIKIO7448400-Navy 01-.webp" alt="Product Image">
-              </a>
-            </div>
-
-            <a class="after:z-1 after:absolute after:inset-0" href="../shop-marketplace/product-detail.html"></a>
-
-            <div class="pt-3">
-              <h4 class="font-medium text-sm text-gray-800 dark:text-neutral-200 capitalize">
-                air jordan 1 low - obsidian university gold
-              </h4>
-              <div class="mt-1 flex flex-wrap items-center gap-1">
-                <span class="font-semibold text-emerald-600 dark:text-emerald-500">
-                  Rp <span class="text-sm">1.939.000</span>
-                </span>
-                <span class="ms-auto text-sm text-gray-500 dark:text-neutral-500">
-                  Nike
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- End Card -->
-
-        <!-- Card -->
-        <div class="h-full flex flex-col">
-          <div class="group relative">
-            <div class="relative">
-              <a class="block shrink-0 relative w-full h-48 md:h-64 overflow-hidden rounded-xl focus:outline-hidden" href="../../pro/shop-marketplace/product-detail.html">
-                <img class="size-full absolute inset-0 object-cover object-center group-hover:scale-105 group-focus:scale-105 transition-transform duration-500 ease-in-out rounded-xl" src="../assets/img/product/ADIDAS-F34RUADI5-ADIKI9873-White 01-.webp" alt="Product Image">
-              </a>
-            </div>
-
-            <a class="after:z-1 after:absolute after:inset-0" href="../../pro/shop-marketplace/product-detail.html"></a>
-
-            <div class="pt-3">
-              <h4 class="font-medium text-sm text-gray-800 dark:text-neutral-200 capitalize">
-                fx adizero evo sl - off white aurora coffee met
-              </h4>
-              <div class="mt-1 flex flex-wrap items-center gap-1">
-                <span class="font-semibold text-emerald-600 dark:text-emerald-500">
-                  Rp <span class="text-sm">2.500.000</span>
-                </span>
-                <span class="ms-auto text-sm text-gray-500 dark:text-neutral-500">
-                  Adidas
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- End Card -->
-
-        <!-- Card -->
-        <div class="h-full flex flex-col">
-          <div class="group relative">
-            <div class="relative">
-              <a class="block shrink-0 relative w-full h-48 md:h-64 overflow-hidden rounded-xl focus:outline-hidden" href="../../pro/shop-marketplace/product-detail.html">
-                <img class="size-full absolute inset-0 object-cover object-center group-hover:scale-105 group-focus:scale-105 transition-transform duration-500 ease-in-out rounded-xl" src="../assets/img/product/ON-FFSSBONR5-ONRM10100264-Black 01-.webp" alt="Product Image">
-              </a>
-            </div>
-
-            <a class="after:z-1 after:absolute after:inset-0" href="../../pro/shop-marketplace/product-detail.html"></a>
-
-            <div class="pt-3">
-              <h4 class="font-medium text-sm text-gray-800 dark:text-neutral-200 capitalize">
-                on cloudtilt men's sneakers shoes - eclipse black
-              </h4>
-              <div class="mt-1 flex flex-wrap items-center gap-1">
-                <span class="font-semibold text-emerald-600 dark:text-emerald-500">
-                  Rp <span class="text-sm">2.800.000</span>
-                </span>
-                <span class="ms-auto text-sm text-gray-500 dark:text-neutral-500">
-                  On Cloud
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- End Card -->
-
-        <!-- Card -->
-        <div class="h-full flex flex-col">
-          <div class="group relative">
-            <div class="relative">
-              <a class="block shrink-0 relative w-full h-48 md:h-64 overflow-hidden rounded-xl focus:outline-hidden" href="../../pro/shop-marketplace/product-detail.html">
-                <img class="size-full absolute inset-0 object-cover object-center group-hover:scale-105 group-focus:scale-105 transition-transform duration-500 ease-in-out rounded-xl" src="../assets/img/product/NIKE-F34KBNIK5-NIKIW3808400-Navy 01-.webp" alt="Product Image">
-              </a>
-            </div>
-
-            <a class="after:z-1 after:absolute after:inset-0" href="../../pro/shop-marketplace/product-detail.html"></a>
-
-            <div class="pt-3">
-              <h4 class="font-medium text-sm text-gray-800 dark:text-neutral-200 capitalize">
-                air jordan 13 retro - navy university blue flint
-              </h4>
-              <div class="mt-1 flex flex-wrap items-center gap-1">
-                <span class="font-semibold text-emerald-600 dark:text-emerald-500">
-                  Rp <span class="text-sm">3.269.000</span>
-                </span>
-                <span class="ms-auto text-sm text-gray-500 dark:text-neutral-500">
-                  Nike
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- End Card -->
-
-
+          </a>
+        @empty
+          <p class="col-span-full py-4 text-sm text-gray-500 dark:text-neutral-400">Belum ada produk lain tersedia.</p>
+        @endforelse
       </div>
-      <!-- End Grid -->
     </div>
     <!-- End Featured -->
 
@@ -2254,80 +1977,20 @@
       <div class="hs-carousel w-full overflow-hidden">
         <div class="hs-carousel w-full">
           <div class="hs-carousel-body flex flex-nowrap gap-2 sm:gap-4 transition-transform duration-700 cursor-grab select-none">
-            <div class="hs-carousel-slide">
-              <!-- Category Card -->
-              <a class="block flex items-center bg-white border border-gray-200 hover:border-gray-300 rounded-xl focus:outline-hidden focus:border-gray-300 dark:bg-neutral-900 dark:border-neutral-700 dark:hover:border-neutral-600 dark:focus:border-neutral-600" href="../../pro/shop-marketplace/listing.html">
-                <div class="relative shrink-0 w-20 sm:w-28 h-20">
-                  <img class="size-full absolute inset-0 object-cover object-center rounded-s-xl" src="../assets/img/category/running.jpg" alt="Product Image">
-                </div>
-                <div class="grow p-3">
-                  <span class="block font-medium text-sm text-gray-800 dark:text-neutral-200">
-                    Running
-                  </span>
-                </div>
-              </a>
-              <!-- End Category Card -->
-            </div>
-
-            <div class="hs-carousel-slide">
-              <!-- Category Card -->
-              <a class="block flex items-center bg-white border border-gray-200 hover:border-gray-300 rounded-xl focus:outline-hidden focus:border-gray-300 dark:bg-neutral-900 dark:border-neutral-700 dark:hover:border-neutral-600 dark:focus:border-neutral-600" href="../../pro/shop-marketplace/listing.html">
-                <div class="relative shrink-0 w-20 sm:w-28 h-20">
-                  <img class="size-full absolute inset-0 object-cover object-center rounded-s-xl" src="../assets/img/category/soccer.jpg" alt="Product Image">
-                </div>
-                <div class="grow p-3">
-                  <span class="block font-medium text-sm text-gray-800 dark:text-neutral-200">
-                    Soccer
-                  </span>
-                </div>
-              </a>
-              <!-- End Category Card -->
-            </div>
-
-            <div class="hs-carousel-slide">
-              <!-- Category Card -->
-              <a class="block flex items-center bg-white border border-gray-200 hover:border-gray-300 rounded-xl focus:outline-hidden focus:border-gray-300 dark:bg-neutral-900 dark:border-neutral-700 dark:hover:border-neutral-600 dark:focus:border-neutral-600" href="../../pro/shop-marketplace/listing.html">
-                <div class="relative shrink-0 w-20 sm:w-28 h-20">
-                  <img class="size-full absolute inset-0 object-cover object-center rounded-s-xl" src="../assets/img/category/badminton.jpg" alt="Product Image">
-                </div>
-                <div class="grow p-3">
-                  <span class="block font-medium text-sm text-gray-800 dark:text-neutral-200">
-                    Badminton
-                  </span>
-                </div>
-              </a>
-              <!-- End Category Card -->
-            </div>
-
-            <div class="hs-carousel-slide">
-              <!-- Category Card -->
-              <a class="block flex items-center bg-white border border-gray-200 hover:border-gray-300 rounded-xl focus:outline-hidden focus:border-gray-300 dark:bg-neutral-900 dark:border-neutral-700 dark:hover:border-neutral-600 dark:focus:border-neutral-600" href="../../pro/shop-marketplace/listing.html">
-                <div class="relative shrink-0 w-20 sm:w-28 h-20">
-                  <img class="size-full absolute inset-0 object-cover object-center rounded-s-xl" src="../assets/img/category/sneakers.jpg" alt="Product Image">
-                </div>
-                <div class="grow p-3">
-                  <span class="block font-medium text-sm text-gray-800 dark:text-neutral-200">
-                    Sneakers
-                  </span>
-                </div>
-              </a>
-              <!-- End Category Card -->
-            </div>
-
-            <div class="hs-carousel-slide">
-              <!-- Category Card -->
-              <a class="block flex items-center bg-white border border-gray-200 hover:border-gray-300 rounded-xl focus:outline-hidden focus:border-gray-300 dark:bg-neutral-900 dark:border-neutral-700 dark:hover:border-neutral-600 dark:focus:border-neutral-600" href="../../pro/shop-marketplace/listing.html">
-                <div class="relative shrink-0 w-20 sm:w-28 h-20">
-                  <img class="size-full absolute inset-0 object-cover object-center rounded-s-xl" src="../assets/img/category/basketball.jpg" alt="Product Image">
-                </div>
-                <div class="grow p-3">
-                  <span class="block font-medium text-sm text-gray-800 dark:text-neutral-200">
-                    Basketball
-                  </span>
-                </div>
-              </a>
-              <!-- End Category Card -->
-            </div>
+            @forelse ($categories as $category)
+              <div class="hs-carousel-slide">
+                <a class="block flex items-center bg-white border border-gray-200 hover:border-gray-300 rounded-xl focus:outline-hidden focus:border-gray-300 dark:bg-neutral-900 dark:border-neutral-700 dark:hover:border-neutral-600 dark:focus:border-neutral-600" href="{{ route('front.category', ['category' => $category->slug]) }}">
+                  <div class="relative shrink-0 w-20 sm:w-28 h-20">
+                    <img class="size-full absolute inset-0 object-cover object-center rounded-s-xl" src="{{ $storageUrl($category->icon) }}" alt="{{ $category->name }}" loading="lazy">
+                  </div>
+                  <div class="grow p-3">
+                    <span class="block font-medium text-sm text-gray-800 dark:text-neutral-200">{{ $category->name }}</span>
+                  </div>
+                </a>
+              </div>
+            @empty
+              <p class="w-full py-4 text-sm text-gray-500 dark:text-neutral-400">Belum ada kategori tersedia.</p>
+            @endforelse
           </div>
         </div>
       </div>
@@ -2348,31 +2011,13 @@
 
       <!-- Grid -->
       <div class="flex flex-wrap items-center gap-3 lg:gap-6 xl:gap-16">
-        <a class="p-4 flex flex-1 justify-center items-center hover:bg-gray-100 rounded-full focus:outline-hidden focus:bg-gray-100 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800" href="#">
-          <img class="h-6 w-auto object-contain mx-auto sm:mx-0" src="../assets/img/brand/nike.webp" alt="Adidas">
-        </a>
-
-        <a class="p-4 flex flex-1 justify-center items-center hover:bg-gray-100 rounded-full focus:outline-hidden focus:bg-gray-100 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800" href="#">
-          <img class="h-6 w-auto object-contain mx-auto sm:mx-0" src="../assets/img/brand/adidas.webp" alt="Adidas">
-        </a>
-
-        <a class="p-4 flex flex-1 justify-center items-center hover:bg-gray-100 rounded-full focus:outline-hidden focus:bg-gray-100 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800" href="#">
-          <img class="h-6 w-auto object-contain mx-auto sm:mx-0" src="../assets/img/brand/new-balance.webp" alt="Adidas">
-        </a>
-
-        <a class="p-4 flex flex-1 justify-center items-center hover:bg-gray-100 rounded-full focus:outline-hidden focus:bg-gray-100 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800" href="#">
-          <img class="h-6 w-auto object-contain mx-auto sm:mx-0" src="../assets/img/brand/on-running.webp" alt="Adidas">
-        </a>
-
-        <a class="p-4 flex flex-1 justify-center items-center hover:bg-gray-100 rounded-full focus:outline-hidden focus:bg-gray-100 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800" href="#">
-          <img class="h-6 w-auto object-contain mx-auto sm:mx-0" src="../assets/img/brand/puma.webp" alt="Adidas">
-        </a>
-
-        <a class="p-4 flex flex-1 justify-center items-center hover:bg-gray-100 rounded-full focus:outline-hidden focus:bg-gray-100 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800" href="#">
-          <img class="h-6 w-auto object-contain mx-auto sm:mx-0" src="../assets/img/brand/converse.webp" alt="Adidas">
-        </a>
-
-
+        @forelse ($brands as $brand)
+          <div class="p-4 flex flex-1 justify-center items-center rounded-full">
+            <img class="h-6 w-auto object-contain mx-auto sm:mx-0" src="{{ $storageUrl($brand->logo) }}" alt="{{ $brand->name }}" title="{{ $brand->name }}" loading="lazy">
+          </div>
+        @empty
+          <p class="w-full py-4 text-sm text-gray-500 dark:text-neutral-400">Belum ada merek tersedia.</p>
+        @endforelse
       </div>
       <!-- End Grid -->
     </div>
@@ -2542,15 +2187,15 @@
 
 
   <!-- JS PLUGINS -->
-  <script src="../assets/vendor/@floating-ui/core/dist/floating-ui.core.umd.min.js"></script>
-  <script src="../assets/vendor/@floating-ui/dom/dist/floating-ui.dom.umd.min.js"></script>
+  <script src="{{ asset('assets/vendor/@floating-ui/core/dist/floating-ui.core.umd.min.js') }}"></script>
+  <script src="{{ asset('assets/vendor/@floating-ui/dom/dist/floating-ui.dom.umd.min.js') }}"></script>
   <!-- Required plugins -->
-  <script src="../assets/vendor/preline/dist/index.js?v=3.0.1"></script>
+  <script src="{{ asset('assets/vendor/preline/dist/index.js?v=3.0.1') }}"></script>
   <!-- Clipboard -->
-  <script src="../assets/vendor/clipboard/dist/clipboard.min.js"></script>
-  <script src="../assets/js/hs-copy-clipboard-helper.js"></script>
+  <script src="{{ asset('assets/vendor/clipboard/dist/clipboard.min.js') }}"></script>
+  <script src="{{ asset('assets/js/hs-copy-clipboard-helper.js') }}"></script>
 
-  <script src="../assets/vendor/lodash/lodash.min.js"></script>
+  <script src="{{ asset('assets/vendor/lodash/lodash.min.js') }}"></script>
   <script>
     function contentToSwitch() {
       const BREAKPOINTS = {
@@ -2571,7 +2216,7 @@
           if (windowWidth >= BREAKPOINTS[key]) currentWrapper = document.querySelector(options[key]);
         });
 
-        if (currentWrapper.contains(el)) return false;
+        if (!currentWrapper || currentWrapper.contains(el)) return;
 
         currentWrapper.append(el);
       });
@@ -2583,7 +2228,7 @@
 
     window.addEventListener("resize", _.debounce(() => {
       contentToSwitch();
-    }), 100);
+    }, 100));
   </script>
 
   <script>
@@ -2631,7 +2276,10 @@
 
             const syncThumbs = () => {
               thumbs.forEach((thumb, index) => {
-                thumb.classList.toggle('active', index === currentIndex);
+                const isActive = index === currentIndex;
+                thumb.classList.toggle('active', isActive);
+                thumb.classList.toggle('hs-carousel-active', isActive);
+                thumb.setAttribute('aria-current', isActive ? 'true' : 'false');
               });
             };
 
@@ -2786,6 +2434,23 @@
         updateLayout();
       })();
     });
+  </script>
+
+  <script>
+    (() => {
+      const form = document.getElementById('shoe-order-form');
+      if (!form) return;
+
+      const sizeLabel = form.querySelector('[name="shoe_size"]');
+      const syncSelectedSize = () => {
+        const selected = form.querySelector('[name="size_id"]:checked');
+        if (sizeLabel) sizeLabel.value = selected?.dataset.size ?? '';
+      };
+
+      form.addEventListener('change', syncSelectedSize);
+      form.addEventListener('submit', syncSelectedSize);
+      syncSelectedSize();
+    })();
   </script>
 
 </body>

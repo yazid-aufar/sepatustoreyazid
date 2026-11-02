@@ -26,7 +26,13 @@ class FrontController extends Controller
 
     public function details(Shoe $shoe) // Route model binding for the Shoe model
     {
-        return view('front.details', compact('shoe'));
+        $shoe->load(['brand', 'category', 'photos', 'sizes']);
+
+        // Menyediakan data Featured, kategori, dan merek.
+        $data = $this->frontService->getFrontPageData();
+        $data['shoe'] = $shoe;
+
+        return view('front.details', $data);
     }
 
     public function category(Category $category)
