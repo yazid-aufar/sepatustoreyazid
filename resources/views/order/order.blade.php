@@ -1592,15 +1592,15 @@
           <ol class=" flex items-center whitespace-nowrap">
             <li class="flex items-center">
 
-              <a class="py-0.5 px-1.5 flex items-center gap-x-1 text-sm rounded-md text-gray-600 hover:bg-gray-100 focus:bg-gray-100 focus:outline-hidden dark:text-neutral-400 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800" href="listing.html">
-                Sneakers
+              <a class="py-0.5 px-1.5 flex items-center gap-x-1 text-sm rounded-md text-gray-600 hover:bg-gray-100 focus:bg-gray-100 focus:outline-hidden dark:text-neutral-400 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800" href="{{ $shoe->category ? route('front.category', ['category' => $shoe->category->slug]) : route('front.index') }}">
+                {{ $shoe->category?->name ?? '-' }}
               </a>
               <svg class="shrink-0 overflow-visible size-4  text-gray-400 dark:text-neutral-600" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                 <path d="M6 13L10 3" stroke="currentColor" stroke-linecap="round"></path>
               </svg>
             </li>
             <li class="capitalize ps-1.5 flex items-center truncate font-semibold text-gray-800 dark:text-neutral-200 text-sm truncate">
-              <span class="truncate">air jordan 1 low - obsidian university gold</span>
+              <span class="truncate">{{ $shoe->name }}</span>
             </li>
           </ol>
           <!-- End Breadcrumb -->
@@ -1609,7 +1609,7 @@
         <div class="py-2 sm:pb-0 sm:pt-5 space-y-5">
         <!-- Form -->
         <form>
-          <livewire:order-form>
+          <livewire:order-form :shoe="$shoe" :order-data="$orderData">
             <!-- Products Card -->
             <div class="flex flex-col mb-5 bg-white border border-stone-200 overflow-hidden rounded-xl shadow-2xs dark:bg-neutral-800 dark:border-neutral-700">
               <!-- Header -->

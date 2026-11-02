@@ -1,10 +1,38 @@
 <?php
 
+use App\Models\Shoe;
+use Illuminate\Support\Facades\Storage;
+use Livewire\Attributes\Computed;
+use Livewire\Attributes\Locked;
 use Livewire\Component;
 
 new class extends Component
 {
-    // Booking dan Product Summary dipisahkan ke komponen ini.
+    #[Locked]
+    public Shoe $shoe;
+
+    #[Locked]
+    public array $orderData = [];
+
+    public function mount(Shoe $shoe, array $orderData): void
+    {
+        $this->shoe = $shoe->loadMissing(['brand', 'category']);
+        $this->orderData = $orderData;
+    }
+
+    #[Computed]
+    public function thumbnailUrl(): ?string
+    {
+        if (blank($this->shoe->thumbnail)) {
+            return null;
+        }
+
+        $disk = Storage::disk();
+
+        return $disk->providesTemporaryUrls()
+            ? $disk->temporaryUrl($this->shoe->thumbnail, now()->addHour())
+            : $disk->url($this->shoe->thumbnail);
+    }
 };
 ?>
 
@@ -176,24 +204,30 @@ new class extends Component
             <!-- Item -->
             <div class=" flex gap-x-5">
               <div class="relative">
-                <img class="shrink-0 w-20 h-28 object-contain rounded-lg dark:bg-neutral-700" src="{{ asset('assets/img/product/NIKE-F34KBNIK5-NIKIO7448400-Navy 01-.webp') }}" alt="Product Image">
+                @if ($this->thumbnailUrl)
+                  <img class="shrink-0 w-20 h-28 object-contain rounded-lg dark:bg-neutral-700" src="{{ $this->thumbnailUrl }}" alt="{{ $shoe->name }}">
+                @else
+                  <div class="shrink-0 w-20 h-28 flex items-center justify-center rounded-lg bg-gray-100 text-xs text-gray-500 dark:bg-neutral-700 dark:text-neutral-400">
+                    No image
+                  </div>
+                @endif
               </div>
 
               <div class="grow flex flex-col">
-                <label for="hs-pro-epdsku" class="block mb-2 text-sm font-medium text-stone-800 dark:text-neutral-200 capitalize">
-                  air jordan 1 low - obsidian university gold
-                </label>
+                <p class="block mb-2 text-sm font-medium text-stone-800 dark:text-neutral-200 capitalize">
+                  {{ $shoe->name }}
+                </p>
 
 
                 <ul class="mt-1.5 space-y-1">
                   <li class="text-xs text-gray-500 dark:text-neutral-500">
-                    Brand: Nike
+                    Brand: {{ $shoe->brand?->name ?? '-' }}
                   </li>
                   <li class="text-xs text-gray-500 dark:text-neutral-500">
-                    Category: Sneakers
+                    Category: {{ $shoe->category?->name ?? '-' }}
                   </li>
                   <li class="text-xs text-gray-500 dark:text-neutral-500">
-                    Size: EU 42
+                    Size: {{ $orderData['shoe_size'] ?? '-' }}
                   </li>
                 </ul>
               </div>
