@@ -40,7 +40,7 @@ new class extends Component
   <div class="lg:col-span-4 space-y-5">
 
     <!-- Products Card -->
-    <div class="flex flex-col bg-white border border-stone-200 overflow-hidden rounded-xl shadow-2xs dark:bg-neutral-800 dark:border-neutral-700">
+    <div class="flex flex-col mb-5  bg-white border border-stone-200 overflow-hidden rounded-xl shadow-2xs dark:bg-neutral-800 dark:border-neutral-700">
       <!-- Header -->
       <div class="py-3 px-5 flex justify-between items-center gap-x-5 border-b border-stone-200 dark:border-neutral-700">
         <h2 class="inline-block font-semibold text-stone-800 dark:text-neutral-200">
@@ -162,7 +162,7 @@ new class extends Component
             <dt class="col-span-8 text-sm text-stone-800 dark:text-neutral-200">Subtotal:</dt>
             <dd class="col-span-4 text-end font-semibold text-sm text-stone-800 dark:text-neutral-200">Rp. 1.939.000</dd>
             <dt class="col-span-8 text-sm text-stone-800 dark:text-neutral-200">Discount:</dt>
-            <dd class="col-span-4 text-end font-semibold text-sm text-stone-800 dark:text-neutral-200">Rp. 300.000</dd>
+            <dd class="col-span-4 text-end font-semibold text-sm text-green-700 dark:text-neutral-200">- Rp. 300.000</dd>
             <dt class="col-span-8 text-sm text-stone-800 dark:text-neutral-200">Order total:</dt>
             <dd class="col-span-4 text-end font-semibold text-sm text-stone-800 dark:text-neutral-200">Rp. 1.639.000</dd>
           </dl>
