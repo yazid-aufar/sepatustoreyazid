@@ -173,6 +173,26 @@ new class extends Component
 
       </div>
       <!-- End Body -->
+      <!-- Footer -->
+        <div class="py-2 px-5 border-t border-stone-200 dark:border-neutral-700">
+            <div class="flex justify-between items-center gap-x-2">
+            <!-- Button -->
+            <button type="button" class="py-2 px-2.5 inline-flex items-center gap-x-1.5 text-xs rounded-lg border border-transparent bg-white text-stone-800 hover:bg-stone-100 disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:bg-stone-100 dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-300 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700">
+                <svg class="shrink-0 size-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="m15 18-6-6 6-6" />
+                </svg>
+                Prev
+            </button>
+            <!-- End Button -->
+
+            <div class="flex justify-end">
+                <a type="button" href="../../shop-marketplace/payment.html" class="py-1.5 px-3 inline-flex items-center gap-x-1.5 text-sm font-medium rounded-md border border-transparent bg-green-600 text-white hover:bg-green-700 disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:ring-2 focus:ring-green-500">
+                Continue
+                </a>
+            </div>
+            </div>
+        </div>
+        <!-- End Footer -->
     </div>
     <!-- End Products Card -->
 
