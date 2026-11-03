@@ -1765,14 +1765,21 @@
 
 
                           <ul class="mt-1.5 space-y-1">
-                            <li class="text-xs text-gray-500 dark:text-neutral-500">
-                              Brand: Nike
+                            <li class="flex justify-between gap-x-4 text-xs text-gray-500 dark:text-neutral-500">
+                              <span>Brand:</span>
+                              <span class="text-right">Nike</span>
                             </li>
-                            <li class="text-xs text-gray-500 dark:text-neutral-500">
-                              Category: Sneakers
+                            <li class="flex justify-between gap-x-4 text-xs text-gray-500 dark:text-neutral-500">
+                              <span>Category:</span>
+                              <span class="text-right">Sneakers</span>
                             </li>
-                            <li class="text-xs text-gray-500 dark:text-neutral-500">
-                              Size: EU 42
+                            <li class="flex justify-between gap-x-4 text-xs text-gray-500 dark:text-neutral-500">
+                              <span>Size:</span>
+                              <span class="text-right">EU 42</span>
+                            </li>
+                            <li class="flex justify-between gap-x-4 text-xs text-gray-500 dark:text-neutral-500">
+                              <span>Quantity:</span>
+                              <span class="text-right">2 Pcs</span>
                             </li>
                           </ul>
                         </div>
