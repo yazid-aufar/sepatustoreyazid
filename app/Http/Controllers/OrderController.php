@@ -44,7 +44,10 @@ class OrderController extends Controller
     public function customerData()
     {
         $data = $this->orderService->getOrderDetails();
-        return view('order.customer_data', $data);
+
+        return view('order.customer_data', [
+            'data' => $data,
+        ]);
     }
 
     public function saveCustomerData(StoreCustomerDataRequest $request)

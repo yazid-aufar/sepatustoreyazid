@@ -165,23 +165,20 @@ new class extends Component
     {
         $this->name = trim($this->name);
         $this->email = trim($this->email);
+
+        // Ambil stok terbaru dari database.
         $this->shoe->refresh();
 
+        // Validasi dahulu sebelum memperbarui session.
         $validated = $this->validate();
 
-        $data = $orderService->saveBookingTransaction([
+        $orderService->updateCustomerData([
             'name' => $validated['name'],
             'email' => $validated['email'],
             'quantity' => (int) $validated['quantity'],
         ]);
 
-        $this->orderData = $data['orderData'];
-        $this->quantity = (int) $this->orderData['quantity'];
-
-        // Simpan di halaman ini sampai view langkah berikutnya tersedia.
-        if (view()->exists('order.customer_data')) {
-            return redirect()->route('front.customer_data');
-        }
+        return redirect()->route('front.customer_data');
     }
 
     public function previous()
@@ -209,7 +206,7 @@ new class extends Component
   <div class="lg:col-span-4 space-y-5">
 
     <!-- Products Card -->
-    <div class="flex flex-col mb-5  bg-white border border-stone-200 overflow-hidden rounded-xl shadow-2xs dark:bg-neutral-800 dark:border-neutral-700">
+    <form wire:submit.prevent="submit" novalidate class="flex flex-col mb-5  bg-white border border-stone-200 overflow-hidden rounded-xl shadow-2xs dark:bg-neutral-800 dark:border-neutral-700">
       <!-- Header -->
       <div class="py-3 px-5 flex justify-between items-center gap-x-5 border-b border-stone-200 dark:border-neutral-700">
         <h2 class="inline-block font-semibold text-stone-800 dark:text-neutral-200">
@@ -233,7 +230,7 @@ new class extends Component
               </span>
             </span>
           </label>
-          <input id="order-name" type="text" wire:model="name" wire:keydown.enter.prevent="submit" autocomplete="name" class="py-1.5 sm:py-2 px-3 block w-full border-stone-200 rounded-lg sm:text-sm text-stone-800 placeholder:text-stone-500 focus:z-10 focus:border-green-600 focus:ring-green-600 dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-200 dark:placeholder:text-neutral-500 dark:focus:outline-hidden dark:focus:ring-1 dark:focus:ring-neutral-600" placeholder="Type your complete name" >
+          <input id="order-name" type="text" wire:model="name"  autocomplete="name" class="py-1.5 sm:py-2 px-3 block w-full border-stone-200 rounded-lg sm:text-sm text-stone-800 placeholder:text-stone-500 focus:z-10 focus:border-green-600 focus:ring-green-600 dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-200 dark:placeholder:text-neutral-500 dark:focus:outline-hidden dark:focus:ring-1 dark:focus:ring-neutral-600" placeholder="Type your complete name" >
           @error('name')
             <p class="mt-1.5 text-xs text-red-600 dark:text-red-400" role="alert">{{ $message }}</p>
           @enderror
@@ -251,7 +248,7 @@ new class extends Component
               </span>
             </span>
           </label>
-          <input id="order-email" type="email" wire:model="email" wire:keydown.enter.prevent="submit" autocomplete="email" class="py-1.5 sm:py-2 px-3 block w-full border-stone-200 rounded-lg sm:text-sm text-stone-800 placeholder:text-stone-500 focus:z-10 focus:border-green-600 focus:ring-green-600 dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-200 dark:placeholder:text-neutral-500 dark:focus:outline-hidden dark:focus:ring-1 dark:focus:ring-neutral-600" placeholder="Type your email address" >
+          <input id="order-email" type="email" wire:model="email"  autocomplete="email" class="py-1.5 sm:py-2 px-3 block w-full border-stone-200 rounded-lg sm:text-sm text-stone-800 placeholder:text-stone-500 focus:z-10 focus:border-green-600 focus:ring-green-600 dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-200 dark:placeholder:text-neutral-500 dark:focus:outline-hidden dark:focus:ring-1 dark:focus:ring-neutral-600" placeholder="Type your email address" >
           @error('email')
             <p class="mt-1.5 text-xs text-red-600 dark:text-red-400" role="alert">{{ $message }}</p>
           @enderror
@@ -274,7 +271,7 @@ new class extends Component
 
             <div class="py-1.5 px-3 bg-white border border-stone-200 rounded-lg dark:bg-neutral-800 dark:border-neutral-700">
               <div class="w-full flex justify-between items-center gap-x-3">
-                <input id="quantity-input" class="w-full min-w-12 p-0 bg-transparent border-0 text-stone-800 focus:ring-0 dark:text-white" type="number" min="1" max="{{ $shoe->stock }}" step="1" wire:model.live.debounce.500ms="quantity" wire:keydown.enter.prevent="submit">
+                <input id="quantity-input" class="w-full min-w-12 p-0 bg-transparent border-0 text-stone-800 focus:ring-0 dark:text-white" type="number" min="1" max="{{ $shoe->stock }}" step="1" wire:model.live.debounce.500ms="quantity" >
                 <div class="flex justify-end items-center gap-x-1.5">
                   <button type="button" aria-label="Decrease quantity" wire:click="decrementQuantity" wire:loading.attr="disabled" @disabled((int) $quantity <= 1) class="size-6 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-full border border-stone-200 bg-white text-stone-800 shadow-2xs hover:bg-stone-50 disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:bg-stone-50 dark:bg-neutral-800 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-700 dark:focus:bg-neutral-700">
                     <svg class="shrink-0 size-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -382,14 +379,14 @@ new class extends Component
             <!-- End Button -->
 
             <div class="flex justify-end">
-                <a type="button" href="{{ route('front.customer_data') }}" wire:click.prevent="submit" class="py-1.5 px-3 inline-flex items-center gap-x-1.5 text-sm font-medium rounded-md border border-transparent bg-green-600 text-white hover:bg-green-700 disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:ring-2 focus:ring-green-500">
-                Continue
-                </a>
+                <button type="submit" class="py-1.5 px-3 inline-flex items-center gap-x-1.5 text-sm font-medium rounded-md border border-transparent bg-green-600 text-white hover:bg-green-700 disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:ring-2 focus:ring-green-500">
+                    Continue
+                </button>
             </div>
             </div>
         </div>
         <!-- End Footer -->
-    </div>
+    </form>
     <!-- End Products Card -->
 
     {{ $slot }}

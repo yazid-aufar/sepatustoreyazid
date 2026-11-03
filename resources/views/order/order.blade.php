@@ -1608,11 +1608,10 @@
 
         <div class="py-2 sm:pb-0 sm:pt-5 space-y-5">
         <!-- Form -->
-        <form>
-          <livewire:order-form :shoe="$shoe" :order-data="$orderData">
-
-          </livewire:order-form>
-        </form>
+        <div>
+            <livewire:order-form :shoe="$shoe" :order-data="$orderData">
+            </livewire:order-form>
+        </div>
         <!-- End Form -->
       </div>
 
