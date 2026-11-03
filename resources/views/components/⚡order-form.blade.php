@@ -116,23 +116,49 @@ new class extends Component
         $this->resetValidation('promoCode');
     }
 
-    public function redeemPromo(): void
+    public function redeemPromo(OrderService $orderService): void
     {
         $this->promoCode = trim($this->promoCode);
         $this->promoStatus = null;
         $this->resetValidation('promoCode');
 
         if ($this->promoCode === '') {
-            $this->addError('promoCode', 'Masukkan kode promo terlebih dahulu.');
+            $this->addError(
+                'promoCode',
+                'Masukkan kode promo terlebih dahulu.'
+            );
 
             return;
         }
 
         $this->validateOnly('promoCode');
+        $this->validateOnly('quantity');
 
-        // Pengecekan database dan penerapan diskon baru dikerjakan nanti.
-        // Status found/not_found belum ditetapkan tanpa hasil pengecekan.
-        $this->promoStatus = 'pending';
+        // Hitung berdasarkan quantity terbaru.
+        $this->syncOrderSummary();
+
+        // Service mencari kode promo di database.
+        $result = $orderService->applyPromoCode($this->promoCode);
+
+        if (isset($result['error'])) {
+            $this->promoStatus = 'not_found';
+
+            $this->addError(
+                'promoCode',
+                $result['error']
+            );
+
+            return;
+        }
+
+        // Ambil hasil perhitungan dan data promo yang sudah disimpan.
+        $data = $orderService->getOrderDetails();
+
+        $this->orderData = $data['orderData'];
+        $this->quantity = (int) $this->orderData['quantity'];
+        $this->promoCode = (string) $this->orderData['promo_code'];
+
+        $this->promoStatus = 'found';
     }
 
     public function submit(OrderService $orderService)
