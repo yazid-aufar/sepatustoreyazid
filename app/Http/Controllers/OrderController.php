@@ -62,7 +62,8 @@ class OrderController extends Controller
     public function payment()
     {
         $data = $this->orderService->getOrderDetails();
-        return view('order.payment', $data);
+
+        return view('order.payment', ['data' => $data]);
     }
 
     public function paymentConfirm(StorePaymentRequest $request)
