@@ -13,6 +13,7 @@ use App\Repositories\ShoeRepository;
 use App\Repositories\BrandRepository;
 use App\Repositories\Contracts\BrandRepositoryInterface;
 use Illuminate\Support\ServiceProvider;
+use Livewire\Livewire;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -38,6 +39,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        Livewire::addComponent(
+            name: 'order-form',
+            viewPath: resource_path('views/components/⚡order-form.blade.php'),
+        );
     }
 }
