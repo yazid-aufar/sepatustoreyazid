@@ -27,13 +27,13 @@
   <title>Shop Product Detail | Preline Pro | Preline UI, crafted with Tailwind CSS</title>
 
   <!-- Favicon -->
-  <link rel="shortcut icon" href="../favicon.ico">
+  <link rel="shortcut icon" href="{{ asset('favicon.ico') }}">
 
   <!-- Font -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
   <!-- CSS HS -->
-  <link rel="stylesheet" href="../assets/css/main.min.css?v=3.0.1">
+  <link rel="stylesheet" href="{{ asset('assets/css/main.min.css') }}?v=3.0.1">
 
   <!-- Theme Check and Update -->
   <script>
@@ -59,7 +59,7 @@
         <div class="order-1 md:w-auto flex items-center gap-x-1">
           <div class="hidden sm:block">
             <!-- Logo -->
-            <a class="flex-none rounded-md text-xl inline-block font-semibold focus:outline-hidden focus:opacity-80" href="../../pro/shop-marketplace/index.html" aria-label="Preline">
+            <a class="flex-none rounded-md text-xl inline-block font-semibold focus:outline-hidden focus:opacity-80" href="{{ route('front.index') }}" aria-label="Preline">
               <svg
                 class="h-auto"
                 width="196"
@@ -104,7 +104,7 @@
             <!-- End Logo -->
           </div>
           <div class="sm:hidden">
-            <a class="flex-none rounded-md text-xl inline-block font-semibold focus:outline-hidden focus:opacity-80" href="../../pro/shop-marketplace/index.html" aria-label="Preline">
+            <a class="flex-none rounded-md text-xl inline-block font-semibold focus:outline-hidden focus:opacity-80" href="{{ route('front.index') }}" aria-label="Preline">
               <svg class="w-[31px] h-auto" width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path fill-rule="evenodd" clip-rule="evenodd" d="M18.0835 3.23358C9.88316 3.23358 3.23548 9.8771 3.23548 18.0723V35.5832H0.583496V18.0723C0.583496 8.41337 8.41851 0.583252 18.0835 0.583252C27.7485 0.583252 35.5835 8.41337 35.5835 18.0723C35.5835 27.7312 27.7485 35.5614 18.0835 35.5614H16.7357V32.911H18.0835C26.2838 32.911 32.9315 26.2675 32.9315 18.0723C32.9315 9.8771 26.2838 3.23358 18.0835 3.23358Z" class="fill-emerald-600 dark:fill-emerald-500" fill="currentColor" />
                 <path fill-rule="evenodd" clip-rule="evenodd" d="M18.0833 8.62162C12.8852 8.62162 8.62666 12.9245 8.62666 18.2879V35.5833H5.97468V18.2879C5.97468 11.5105 11.3713 5.97129 18.0833 5.97129C24.7954 5.97129 30.192 11.5105 30.192 18.2879C30.192 25.0653 24.7954 30.6045 18.0833 30.6045H16.7355V27.9542H18.0833C23.2815 27.9542 27.54 23.6513 27.54 18.2879C27.54 12.9245 23.2815 8.62162 18.0833 8.62162Z" class="fill-emerald-600 dark:fill-emerald-500" fill="currentColor" />
@@ -162,7 +162,7 @@
                       </div>
                       <div>
                         <span class="block text-sm text-gray-500 dark:text-neutral-400">Booking ID</span>
-                        <span id="booking-id-val" class="text-lg font-medium font-bold text-gray-800 dark:text-neutral-100">SS1892</span>
+                        <span id="booking-id-val" class="text-lg font-medium font-bold text-gray-800 dark:text-neutral-100">{{ $productTransaction->booking_trx_id }}</span>
                       </div>
                     </button>
 
@@ -187,12 +187,12 @@
                   <!-- Item -->
                   <div class=" flex gap-x-5">
                     <div class="relative">
-                      <img class="shrink-0 w-20 h-28 object-contain rounded-lg dark:bg-neutral-700" src="../assets/img/product/NIKE-F34KBNIK5-NIKIO7448400-Navy 01-.webp" alt="Product Image">
+                      <img class="shrink-0 w-20 h-28 object-contain rounded-lg dark:bg-neutral-700" src="{{ $thumbnailUrl ?? asset('assets/img/logo/logo-short.png') }}" alt="{{ $shoe?->name ?? 'Product Image' }}">
                     </div>
 
                     <div class="grow flex flex-col">
                       <label for="hs-pro-epdsku" class="block mb-2 text-lg font-medium text-stone-800 dark:text-neutral-200 capitalize">
-                        air jordan 1 low - obsidian university gold
+                        {{ $shoe?->name ?? '-' }}
                       </label>
                     </div>
                   </div>
@@ -207,7 +207,7 @@
                         </span>
                       </div>
                       <p class="text-sm font-semibold text-stone-800 dark:text-neutral-200">
-                        Nike Indonesia
+                        {{ $shoe?->brand?->name ?? '-' }}
                       </p>
                     </div>
 
@@ -218,7 +218,7 @@
                         </span>
                       </div>
                       <p class="text-sm font-semibold text-stone-800 dark:text-neutral-200">
-                        1.939.000
+                        {{ number_format($unitPrice, 0, ',', '.') }}
                       </p>
                     </div>
                   </div>
@@ -233,7 +233,7 @@
                         </span>
                       </div>
                       <p class="text-sm font-semibold text-stone-800 dark:text-neutral-200">
-                        1 Pcs
+                        {{ $productTransaction->quantity }} Pcs
                       </p>
                     </div>
 
@@ -244,7 +244,7 @@
                         </span>
                       </div>
                       <p class="text-sm font-semibold text-stone-800 dark:text-neutral-200">
-                        EU 42
+                        EU {{ $shoeSize ?? '-' }}
                       </p>
                     </div>
                   </div>
@@ -288,17 +288,17 @@
                   <div class="pt-2 pb-4 px-5">
                     <dl class="mt-4 grid grid-cols-12 gap-2 pe-1">
                       <dt class="col-span-8 text-sm text-stone-800 dark:text-neutral-200">Sub Total:</dt>
-                      <dd class="col-span-4 text-end font-semibold text-sm text-stone-800 dark:text-neutral-200">Rp. 1.939.000</dd>
+                      <dd class="col-span-4 text-end font-semibold text-sm text-stone-800 dark:text-neutral-200">Rp. {{ number_format($productTransaction->sub_total_amount, 0, ',', '.') }}</dd>
                       <dt class="col-span-8 text-sm text-stone-800 dark:text-neutral-200">Promo Code:</dt>
-                      <dd class="col-span-4 text-end font-semibold text-sm text-stone-800 dark:text-neutral-200">GAJIHAN</dd>
+                      <dd class="col-span-4 text-end font-semibold text-sm text-stone-800 dark:text-neutral-200">{{ $productTransaction->promoCode?->code ?? '-' }}</dd>
                       <dt class="col-span-8 text-sm text-stone-800 dark:text-neutral-200">Discount:</dt>
-                      <dd class="col-span-4 text-end font-semibold text-sm text-green-700 dark:text-neutral-200">- Rp. 300.000</dd>
+                      <dd class="col-span-4 text-end font-semibold text-sm text-green-700 dark:text-neutral-200">- Rp. {{ number_format($productTransaction->discount_amount, 0, ',', '.') }}</dd>
                       <dt class="col-span-8 text-sm text-stone-800 dark:text-neutral-200">PPN 11%:</dt>
-                      <dd class="col-span-4 text-end font-semibold text-sm text-stone-800 dark:text-neutral-200">Rp. 213.290</dd>
+                      <dd class="col-span-4 text-end font-semibold text-sm text-stone-800 dark:text-neutral-200">Rp. {{ number_format($totalTax, 0, ',', '.') }}</dd>
                       <dt class="col-span-8 text-sm text-stone-800 dark:text-neutral-200">Delivery:</dt>
                       <dd class="col-span-4 text-end font-semibold text-sm text-stone-800 dark:text-neutral-200">Rp. 0</dd>
                       <dt class="col-span-8 text-sm text-stone-800 dark:text-neutral-200">Grand Total:</dt>
-                      <dd class="col-span-4 text-end font-semibold text-lg text-green-700 dark:text-neutral-200">Rp. 1.639.000</dd>
+                      <dd class="col-span-4 text-end font-semibold text-lg text-green-700 dark:text-neutral-200">Rp. {{ number_format($productTransaction->grand_total_amount, 0, ',', '.') }}</dd>
                     </dl>
                   </div>
                 </div>
@@ -318,7 +318,7 @@
                   </svg>
                   View Booking
                 </button>
-                <a href="../../shop-marketplace/index.html" class="w-full py-2.5 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-green-600 text-white hover:bg-green-700 disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:ring-2 focus:ring-green-500">
+                <a href="{{ route('front.index') }}" class="w-full py-2.5 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-green-600 text-white hover:bg-green-700 disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:ring-2 focus:ring-green-500">
                   Continue shopping
                   <svg class="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="m9 18 6-6-6-6" />
@@ -406,15 +406,15 @@
 
 
   <!-- JS PLUGINS -->
-  <script src="../assets/vendor/@floating-ui/core/dist/floating-ui.core.umd.min.js"></script>
-  <script src="../assets/vendor/@floating-ui/dom/dist/floating-ui.dom.umd.min.js"></script>
+  <script src="{{ asset('assets/vendor/@floating-ui/core/dist/floating-ui.core.umd.min.js') }}"></script>
+  <script src="{{ asset('assets/vendor/@floating-ui/dom/dist/floating-ui.dom.umd.min.js') }}"></script>
   <!-- Required plugins -->
-  <script src="../assets/vendor/preline/dist/index.js?v=3.0.1"></script>
+  <script src="{{ asset('assets/vendor/preline/dist/index.js') }}?v=3.0.1"></script>
   <!-- Clipboard -->
-  <script src="../assets/vendor/clipboard/dist/clipboard.min.js"></script>
-  <script src="../assets/js/hs-copy-clipboard-helper.js"></script>
+  <script src="{{ asset('assets/vendor/clipboard/dist/clipboard.min.js') }}"></script>
+  <script src="{{ asset('assets/js/hs-copy-clipboard-helper.js') }}"></script>
 
-  <script src="../assets/vendor/lodash/lodash.min.js"></script>
+  <script src="{{ asset('assets/vendor/lodash/lodash.min.js') }}"></script>
   <script>
     const paymentDetailsToggle = document.getElementById('payment-details-toggle');
     const paymentDetailsHeader = document.getElementById('payment-details-header');

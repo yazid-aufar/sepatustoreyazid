@@ -10,6 +10,7 @@ use App\Models\Shoe;
 use App\Models\ProductTransaction;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class OrderController extends Controller
 {
@@ -81,7 +82,40 @@ class OrderController extends Controller
 
     public function orderFinished(ProductTransaction $productTransaction)
     {
-        return view('order.order_finished', compact('productTransaction'));
+        $productTransaction->load([
+            'shoe' => fn ($query) => $query->withTrashed(),
+            'shoe.brand' => fn ($query) => $query->withTrashed(),
+            'promoCode' => fn ($query) => $query->withTrashed(),
+        ]);
+
+        $shoe = $productTransaction->shoe;
+        $shoeSize = $shoe?->sizes()
+            ->withTrashed()
+            ->whereKey($productTransaction->shoe_size)
+            ->value('size');
+
+        $thumbnailUrl = null;
+
+        if ($shoe && filled($shoe->thumbnail)) {
+            $storageDisk = Storage::disk(config('filament.default_filesystem_disk'));
+            $thumbnailUrl = $storageDisk->providesTemporaryUrls()
+                ? $storageDisk->temporaryUrl($shoe->thumbnail, now()->addHour())
+                : $storageDisk->url($shoe->thumbnail);
+        }
+
+        // Gunakan harga saat transaksi, bukan harga katalog yang dapat berubah.
+        $unitPrice = $productTransaction->quantity > 0
+            ? $productTransaction->sub_total_amount / $productTransaction->quantity
+            : 0;
+
+        // Pajak belum memiliki kolom sendiri; ongkir saat ini gratis.
+        $totalTax = $productTransaction->grand_total_amount
+            + $productTransaction->discount_amount
+            - $productTransaction->sub_total_amount;
+
+        return view('order.order_finished', compact(
+            'productTransaction', 'shoe', 'shoeSize', 'thumbnailUrl', 'unitPrice', 'totalTax'
+        ));
     }
 
 }
