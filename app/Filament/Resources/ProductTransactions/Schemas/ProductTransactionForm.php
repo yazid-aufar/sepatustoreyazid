@@ -165,9 +165,16 @@ class ProductTransactionForm
                                 ])
                                 ->required(),
 
+
+
                             FileUpload::make('proof')
                                 ->label('Bukti Pembayaran')
+                                ->disk('public')
+                                ->directory('proofs')
+                                ->visibility('public')
                                 ->image()
+                                ->openable()
+                                ->downloadable()
                                 ->required(),
                         ]),
                 ])
