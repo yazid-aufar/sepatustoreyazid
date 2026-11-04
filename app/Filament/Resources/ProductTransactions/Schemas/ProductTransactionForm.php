@@ -168,6 +168,8 @@ class ProductTransactionForm
                             FileUpload::make('proof')
                                 ->label('Bukti Pembayaran')
                                 ->image()
+                                ->openable()
+                                ->downloadable()
                                 ->required(),
 
                         ]),

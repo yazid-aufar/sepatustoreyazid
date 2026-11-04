@@ -11,6 +11,7 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class OrderService
 {
@@ -152,6 +153,9 @@ class OrderService
     {
         $proofPath = null;
 
+        $proofDisk = config('filament.default_filesystem_disk')
+            ?? config('filesystems.default', 'local');
+
         try {
             // Hitung ulang sebelum disimpan sebagai transaksi.
             $orderData = $this->getOrderDetails()['orderData'];
@@ -166,7 +170,15 @@ class OrderService
                 throw new \RuntimeException('Bukti pembayaran wajib diunggah.');
             }
 
-            $proofPath = $validated['proof']->store('proofs', 'public');
+            $proofFile = $validated['proof'];
+
+            $proofName = Str::ulid() . '.' . $proofFile->extension();
+
+            $proofPath = $proofFile->storeAs(
+                '',
+                $proofName,
+                $proofDisk
+            );
 
             if (!$proofPath) {
                 throw new \RuntimeException('Bukti pembayaran gagal disimpan.');
@@ -197,7 +209,7 @@ class OrderService
         } catch (\Throwable $e) {
             // Transaksi database tidak otomatis menghapus file unggahan.
             if ($proofPath) {
-                Storage::disk('public')->delete($proofPath);
+                Storage::disk($proofDisk)->delete($proofPath);
             }
 
             Log::error('Error in payment confirmation: ' . $e->getMessage());
