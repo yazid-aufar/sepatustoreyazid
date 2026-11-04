@@ -1,3 +1,15 @@
+@php
+    $shoe = $data['shoe']->loadMissing(['brand', 'category']);
+    $orderData = $data['orderData'];
+    $thumbnailUrl = null;
+
+    if (filled($shoe->thumbnail)) {
+        $storageDisk = \Illuminate\Support\Facades\Storage::disk();
+        $thumbnailUrl = $storageDisk->providesTemporaryUrls()
+            ? $storageDisk->temporaryUrl($shoe->thumbnail, now()->addHour())
+            : $storageDisk->url($shoe->thumbnail);
+    }
+@endphp
 <!DOCTYPE html>
 <html lang="en" class="relative min-h-full scroll-smooth">
 <head>
@@ -27,13 +39,13 @@
   <title>Shop Product Detail | Preline Pro | Preline UI, crafted with Tailwind CSS</title>
 
   <!-- Favicon -->
-  <link rel="shortcut icon" href="../favicon.ico">
+  <link rel="shortcut icon" href="{{ asset('favicon.ico') }}">
 
   <!-- Font -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
   <!-- CSS HS -->
-  <link rel="stylesheet" href="../assets/css/main.min.css?v=3.0.1">
+  <link rel="stylesheet" href="{{ asset('assets/css/main.min.css') }}?v=3.0.1">
 
   <!-- Theme Check and Update -->
   <script>
@@ -67,7 +79,7 @@
         <ul class="flex flex-wrap items-center gap-3">
           <li class="inline-flex items-center relative text-xs text-gray-500 ps-3.5 first:ps-0 first:after:hidden after:absolute after:top-1/2 after:start-0 after:inline-block after:w-px after:h-2.5 after:bg-gray-400 after:rounded-full after:-translate-y-1/2 after:rotate-12 dark:text-neutral-500 dark:after:bg-neutral-600">
             <button type="button" class="flex items-center gap-x-1.5 text-start text-xs text-gray-500 hover:text-gray-800 focus:outline-hidden focus:text-gray-800 dark:text-neutral-200 dark:hover:text-neutral-400 dark:focus:text-neutral-400" data-hs-overlay="#hs-pro-shmnrsm">
-              <img class="shrink-0 size-3.5 rounded-full" src="../assets/vendor/svg-country-flags/png250px/us.png" alt="English">
+              <img class="shrink-0 size-3.5 rounded-full" src="{{ asset('assets/vendor/svg-country-flags/png250px/us.png') }}" alt="English">
               English · USD
             </button>
           </li>
@@ -106,7 +118,7 @@
         <div class="order-1 md:w-auto flex items-center gap-x-1">
           <div class="hidden sm:block">
             <!-- Logo -->
-            <a class="flex-none rounded-md text-xl inline-block font-semibold focus:outline-hidden focus:opacity-80" href="../../pro/shop-marketplace/index.html" aria-label="Preline">
+            <a class="flex-none rounded-md text-xl inline-block font-semibold focus:outline-hidden focus:opacity-80" href="{{ route('front.index') }}" aria-label="Preline">
               <svg
                 class="h-auto"
                 width="196"
@@ -151,7 +163,7 @@
             <!-- End Logo -->
           </div>
           <div class="sm:hidden">
-            <a class="flex-none rounded-md text-xl inline-block font-semibold focus:outline-hidden focus:opacity-80" href="../../pro/shop-marketplace/index.html" aria-label="Preline">
+            <a class="flex-none rounded-md text-xl inline-block font-semibold focus:outline-hidden focus:opacity-80" href="{{ route('front.index') }}" aria-label="Preline">
               <svg class="w-[31px] h-auto" width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path fill-rule="evenodd" clip-rule="evenodd" d="M18.0835 3.23358C9.88316 3.23358 3.23548 9.8771 3.23548 18.0723V35.5832H0.583496V18.0723C0.583496 8.41337 8.41851 0.583252 18.0835 0.583252C27.7485 0.583252 35.5835 8.41337 35.5835 18.0723C35.5835 27.7312 27.7485 35.5614 18.0835 35.5614H16.7357V32.911H18.0835C26.2838 32.911 32.9315 26.2675 32.9315 18.0723C32.9315 9.8771 26.2838 3.23358 18.0835 3.23358Z" class="fill-emerald-600 dark:fill-emerald-500" fill="currentColor" />
                 <path fill-rule="evenodd" clip-rule="evenodd" d="M18.0833 8.62162C12.8852 8.62162 8.62666 12.9245 8.62666 18.2879V35.5833H5.97468V18.2879C5.97468 11.5105 11.3713 5.97129 18.0833 5.97129C24.7954 5.97129 30.192 11.5105 30.192 18.2879C30.192 25.0653 24.7954 30.6045 18.0833 30.6045H16.7355V27.9542H18.0833C23.2815 27.9542 27.54 23.6513 27.54 18.2879C27.54 12.9245 23.2815 8.62162 18.0833 8.62162Z" class="fill-emerald-600 dark:fill-emerald-500" fill="currentColor" />
@@ -1044,7 +1056,7 @@
                         <!-- Grid -->
                         <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-6">
                           <!-- Item -->
-                          <a class="group block p-4 rounded-lg text-center hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800" href="../../pro/shop-marketplace/listing.html">
+                          <a class="group block p-4 rounded-lg text-center hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800" href="{{ route('front.index') }}">
                             <div class="relative shrink-0">
                               <img class="shrink-0 size-16 sm:size-20 lg:size-24 mx-auto object-cover bg-gray-100 rounded-full dark:bg-neutral-800" src="https://images.unsplash.com/photo-1726828501829-9188cde81755?q=80&w=180&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Product Image">
                               <div class="absolute -top-0.5 end-0.5">
@@ -1056,7 +1068,7 @@
                           <!-- End Item -->
 
                           <!-- Item -->
-                          <a class="group block p-4 rounded-lg text-center hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800" href="../../pro/shop-marketplace/listing.html">
+                          <a class="group block p-4 rounded-lg text-center hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800" href="{{ route('front.index') }}">
                             <div class="relative shrink-0">
                               <img class="shrink-0 size-16 sm:size-20 lg:size-24 mx-auto object-cover bg-gray-100 rounded-full dark:bg-neutral-800" src="https://images.unsplash.com/photo-1616763355603-9755a640a287?q=80&w=180&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Product Image">
                             </div>
@@ -1065,7 +1077,7 @@
                           <!-- End Item -->
 
                           <!-- Item -->
-                          <a class="group block p-4 rounded-lg text-center hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800" href="../../pro/shop-marketplace/listing.html">
+                          <a class="group block p-4 rounded-lg text-center hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800" href="{{ route('front.index') }}">
                             <div class="relative shrink-0">
                               <img class="shrink-0 size-16 sm:size-20 lg:size-24 mx-auto object-cover bg-gray-100 rounded-full dark:bg-neutral-800" src="https://images.unsplash.com/photo-1666401565408-9b6b0741f0d6?q=80&w=180&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Product Image">
                             </div>
@@ -1074,7 +1086,7 @@
                           <!-- End Item -->
 
                           <!-- Item -->
-                          <a class="group block p-4 rounded-lg text-center hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800" href="../../pro/shop-marketplace/listing.html">
+                          <a class="group block p-4 rounded-lg text-center hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800" href="{{ route('front.index') }}">
                             <div class="relative shrink-0">
                               <img class="shrink-0 size-16 sm:size-20 lg:size-24 mx-auto object-cover bg-gray-100 rounded-full dark:bg-neutral-800" src="https://images.unsplash.com/photo-1611186871348-b1ce696e52c9?q=80&w=180&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Product Image">
                             </div>
@@ -1083,7 +1095,7 @@
                           <!-- End Item -->
 
                           <!-- Item -->
-                          <a class="group block p-4 rounded-lg text-center hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800" href="../../pro/shop-marketplace/listing.html">
+                          <a class="group block p-4 rounded-lg text-center hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800" href="{{ route('front.index') }}">
                             <div class="relative shrink-0">
                               <img class="shrink-0 size-16 sm:size-20 lg:size-24 mx-auto object-cover bg-gray-100 rounded-full dark:bg-neutral-800" src="https://images.unsplash.com/photo-1698729616468-5b2f627df845?q=80&w=180&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Product Image">
                               <div class="absolute -top-0.5 end-0.5">
@@ -1095,7 +1107,7 @@
                           <!-- End Item -->
 
                           <!-- Item -->
-                          <a class="group block p-4 rounded-lg text-center hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800" href="../../pro/shop-marketplace/listing.html">
+                          <a class="group block p-4 rounded-lg text-center hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800" href="{{ route('front.index') }}">
                             <div class="relative shrink-0">
                               <img class="shrink-0 size-16 sm:size-20 lg:size-24 mx-auto object-cover bg-gray-100 rounded-full dark:bg-neutral-800" src="https://images.unsplash.com/photo-1662731340335-e5485bd50268?q=80&w=180&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Product Image">
                               <div class="absolute -top-0.5 end-0.5">
@@ -1107,7 +1119,7 @@
                           <!-- End Item -->
 
                           <!-- Item -->
-                          <a class="group block p-4 rounded-lg text-center hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800" href="../../pro/shop-marketplace/listing.html">
+                          <a class="group block p-4 rounded-lg text-center hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800" href="{{ route('front.index') }}">
                             <div class="relative shrink-0">
                               <img class="shrink-0 size-16 sm:size-20 lg:size-24 mx-auto object-cover bg-gray-100 rounded-full dark:bg-neutral-800" src="https://images.unsplash.com/photo-1522401195795-1d580bb06720?q=80&w=180&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Product Image">
                             </div>
@@ -1116,7 +1128,7 @@
                           <!-- End Item -->
 
                           <!-- Item -->
-                          <a class="group block p-4 rounded-lg text-center hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800" href="../../pro/shop-marketplace/listing.html">
+                          <a class="group block p-4 rounded-lg text-center hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800" href="{{ route('front.index') }}">
                             <div class="relative shrink-0">
                               <img class="shrink-0 size-16 sm:size-20 lg:size-24 mx-auto object-cover bg-gray-100 rounded-full dark:bg-neutral-800" src="https://images.unsplash.com/photo-1594155187705-bd33d893961c?q=80&w=180&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Product Image">
                             </div>
@@ -1125,7 +1137,7 @@
                           <!-- End Item -->
 
                           <!-- Item -->
-                          <a class="group block p-4 rounded-lg text-center hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800" href="../../pro/shop-marketplace/listing.html">
+                          <a class="group block p-4 rounded-lg text-center hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800" href="{{ route('front.index') }}">
                             <div class="relative shrink-0">
                               <img class="shrink-0 size-16 sm:size-20 lg:size-24 mx-auto object-cover bg-gray-100 rounded-full dark:bg-neutral-800" src="https://images.unsplash.com/photo-1532543758257-0f4e06e08aec?q=80&w=180&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Product Image">
                             </div>
@@ -1134,7 +1146,7 @@
                           <!-- End Item -->
 
                           <!-- Item -->
-                          <a class="group block p-4 rounded-lg text-center hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800" href="../../pro/shop-marketplace/listing.html">
+                          <a class="group block p-4 rounded-lg text-center hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800" href="{{ route('front.index') }}">
                             <div class="relative shrink-0">
                               <img class="shrink-0 size-16 sm:size-20 lg:size-24 mx-auto object-cover bg-gray-100 rounded-full dark:bg-neutral-800" src="https://images.unsplash.com/photo-1542549237432-a176cb9d5e5e?q=80&w=180&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Product Image">
                               <div class="absolute -top-0.5 end-0.5">
@@ -1146,7 +1158,7 @@
                           <!-- End Item -->
 
                           <!-- Item -->
-                          <a class="group block p-4 rounded-lg text-center hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800" href="../../pro/shop-marketplace/listing.html">
+                          <a class="group block p-4 rounded-lg text-center hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800" href="{{ route('front.index') }}">
                             <div class="relative shrink-0">
                               <img class="shrink-0 size-16 sm:size-20 lg:size-24 mx-auto object-cover bg-gray-100 rounded-full dark:bg-neutral-800" src="https://images.unsplash.com/photo-1628329567705-f8f7150c3cff?q=80&w=180&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Product Image">
                             </div>
@@ -1155,7 +1167,7 @@
                           <!-- End Item -->
 
                           <!-- Item -->
-                          <a class="group block p-4 rounded-lg text-center hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800" href="../../pro/shop-marketplace/listing.html">
+                          <a class="group block p-4 rounded-lg text-center hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800" href="{{ route('front.index') }}">
                             <div class="relative shrink-0">
                               <img class="shrink-0 size-16 sm:size-20 lg:size-24 mx-auto object-cover bg-gray-100 rounded-full dark:bg-neutral-800" src="https://images.unsplash.com/photo-1618482914248-29272d021005?q=80&w=180&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Product Image">
                             </div>
@@ -1164,7 +1176,7 @@
                           <!-- End Item -->
 
                           <!-- Item -->
-                          <a class="group block p-4 rounded-lg text-center hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800" href="../../pro/shop-marketplace/listing.html">
+                          <a class="group block p-4 rounded-lg text-center hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800" href="{{ route('front.index') }}">
                             <div class="relative shrink-0">
                               <img class="shrink-0 size-16 sm:size-20 lg:size-24 mx-auto object-cover bg-gray-100 rounded-full dark:bg-neutral-800" src="https://images.unsplash.com/photo-1550009158-9ebf69173e03?q=80&w=180&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Product Image">
                             </div>
@@ -1173,7 +1185,7 @@
                           <!-- End Item -->
 
                           <!-- Item -->
-                          <a class="group block p-4 rounded-lg text-center hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800" href="../../pro/shop-marketplace/listing.html">
+                          <a class="group block p-4 rounded-lg text-center hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800" href="{{ route('front.index') }}">
                             <div class="relative shrink-0">
                               <img class="shrink-0 size-16 sm:size-20 lg:size-24 mx-auto object-cover bg-gray-100 rounded-full dark:bg-neutral-800" src="https://images.unsplash.com/photo-1631052941794-2a6e26d4ac17?q=80&w=180&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Product Image">
                             </div>
@@ -1182,7 +1194,7 @@
                           <!-- End Item -->
 
                           <!-- Item -->
-                          <a class="group block p-4 rounded-lg text-center hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800" href="../../pro/shop-marketplace/listing.html">
+                          <a class="group block p-4 rounded-lg text-center hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800" href="{{ route('front.index') }}">
                             <div class="relative shrink-0">
                               <img class="shrink-0 size-16 sm:size-20 lg:size-24 mx-auto object-cover bg-gray-100 rounded-full dark:bg-neutral-800" src="https://images.unsplash.com/photo-1657734240363-356201c49b15?q=80&w=180&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Product Image">
                             </div>
@@ -1591,7 +1603,7 @@
           <ol class=" flex items-center whitespace-nowrap">
             <li class="flex items-center">
 
-              <a class="py-0.5 px-1.5 flex items-center gap-x-1 text-sm rounded-md text-gray-600 hover:bg-gray-100 focus:bg-gray-100 focus:outline-hidden dark:text-neutral-400 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800" href="listing.html">
+              <a class="py-0.5 px-1.5 flex items-center gap-x-1 text-sm rounded-md text-gray-600 hover:bg-gray-100 focus:bg-gray-100 focus:outline-hidden dark:text-neutral-400 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800" href="{{ route('front.index') }}">
                 Sneakers
               </a>
               <svg class="shrink-0 overflow-visible size-4  text-gray-400 dark:text-neutral-600" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -1599,7 +1611,7 @@
               </svg>
             </li>
             <li class="capitalize ps-1.5 flex items-center truncate font-semibold text-gray-800 dark:text-neutral-200 text-sm truncate">
-              <span class="truncate">air jordan 1 low - obsidian university gold</span>
+              <span class="truncate">{{ $shoe->name }}</span>
             </li>
           </ol>
           <!-- End Breadcrumb -->
@@ -1607,7 +1619,8 @@
 
         <div class="py-2 sm:pb-0 sm:pt-5 space-y-5">
         <!-- Form -->
-        <form>
+        <form action="{{ route('front.payment_confirm') }}" method="POST" enctype="multipart/form-data">
+          @csrf
           <!-- Grid -->
           <div class="grid grid-cols-1 lg:grid-cols-6 gap-5">
             <div class="lg:col-span-4 space-y-5">
@@ -1628,12 +1641,12 @@
                   <!-- Item -->
                   <div class=" flex gap-x-5">
                     <div class="relative">
-                      <img class="shrink-0 w-20 h-28 object-contain rounded-lg dark:bg-neutral-700" src="../assets/img/product/NIKE-F34KBNIK5-NIKIO7448400-Navy 01-.webp" alt="Product Image">
+                      <img class="shrink-0 w-20 h-28 object-contain rounded-lg dark:bg-neutral-700" src="{{ $thumbnailUrl ?? asset('assets/img/logo/logo-short.png') }}" alt="{{ $shoe->name }}">
                     </div>
 
                     <div class="grow flex flex-col">
                       <label for="hs-pro-epdsku" class="block mb-2 text-lg font-medium text-stone-800 dark:text-neutral-200 capitalize">
-                        air jordan 1 low - obsidian university gold
+                        {{ $shoe->name }}
                       </label>
                     </div>
                   </div>
@@ -1648,7 +1661,7 @@
                         </span>
                       </div>
                       <p class="text-sm font-semibold text-stone-800 dark:text-neutral-200">
-                        Nike Indonesia
+                        {{ $shoe->brand?->name ?? '-' }}
                       </p>
                     </div>
 
@@ -1659,7 +1672,7 @@
                         </span>
                       </div>
                       <p class="text-sm font-semibold text-stone-800 dark:text-neutral-200">
-                        1.939.000
+                        Rp. {{ number_format($shoe->price, 0, ',', '.') }}
                       </p>
                     </div>
                   </div>
@@ -1674,7 +1687,7 @@
                         </span>
                       </div>
                       <p class="text-sm font-semibold text-stone-800 dark:text-neutral-200">
-                        1 Pcs
+                        {{ $orderData['quantity'] }} Pcs
                       </p>
                     </div>
 
@@ -1685,7 +1698,7 @@
                         </span>
                       </div>
                       <p class="text-sm font-semibold text-stone-800 dark:text-neutral-200">
-                        EU 42
+                        EU {{ $orderData['shoe_size'] }}
                       </p>
                     </div>
                   </div>
@@ -1724,7 +1737,7 @@
                         </span>
                       </div>
                       <p class="text-sm font-semibold text-stone-800 dark:text-neutral-200">
-                        Yazid Aufar
+                        {{ $orderData['name'] ?? '-' }}
                       </p>
                     </div>
 
@@ -1738,7 +1751,7 @@
                         </span>
                       </div>
                       <p class="text-sm font-semibold text-stone-800 dark:text-neutral-200">
-                        +62 812-3456-7890
+                        {{ $orderData['phone'] ?? '-' }}
                       </p>
                     </div>
                   </div>
@@ -1757,7 +1770,7 @@
                         </span>
                       </div>
                       <p class="text-sm font-semibold text-stone-800 dark:text-neutral-200">
-                        yazidaufar@gmail.com
+                        {{ $orderData['email'] ?? '-' }}
                       </p>
                     </div>
 
@@ -1772,7 +1785,7 @@
                         </span>
                       </div>
                       <p class="text-sm font-semibold text-stone-800 dark:text-neutral-200">
-                        No. 12, RT. 01 RW. 02, Kel. Sungai Baru, Kec. Banjarmasin Tengah, Kota Banjarmasin, Kalimantan Selatan 70123
+                        {{ $orderData['address'] ?? '-' }}, {{ $orderData['city'] ?? '-' }} {{ $orderData['post_code'] ?? '-' }}
                       </p>
                     </div>
                   </div>
@@ -1807,17 +1820,17 @@
                     <!-- List -->
                     <dl class="mt-4 grid grid-cols-12 gap-2 pe-1">
                       <dt class="col-span-8 text-sm text-stone-800 dark:text-neutral-200">Sub Total:</dt>
-                      <dd class="col-span-4 text-end font-semibold text-sm text-stone-800 dark:text-neutral-200">Rp. 1.939.000</dd>
+                      <dd class="col-span-4 text-end font-semibold text-sm text-stone-800 dark:text-neutral-200">Rp. {{ number_format($orderData['sub_total_amount'], 0, ',', '.') }}</dd>
                       <dt class="col-span-8 text-sm text-stone-800 dark:text-neutral-200">Promo Code:</dt>
-                      <dd class="col-span-4 text-end font-semibold text-sm text-stone-800 dark:text-neutral-200">GAJIHAN</dd>
+                      <dd class="col-span-4 text-end font-semibold text-sm text-stone-800 dark:text-neutral-200">{{ $orderData['promo_code'] ?? '-' }}</dd>
                       <dt class="col-span-8 text-sm text-stone-800 dark:text-neutral-200">Discount:</dt>
-                      <dd class="col-span-4 text-end font-semibold text-sm text-green-700 dark:text-neutral-200">- Rp. 300.000</dd>
+                      <dd class="col-span-4 text-end font-semibold text-sm text-green-700 dark:text-neutral-200">- Rp. {{ number_format($orderData['discount_amount'], 0, ',', '.') }}</dd>
                       <dt class="col-span-8 text-sm text-stone-800 dark:text-neutral-200">PPN 11%:</dt>
-                      <dd class="col-span-4 text-end font-semibold text-sm text-stone-800 dark:text-neutral-200">Rp. 213.290</dd>
+                      <dd class="col-span-4 text-end font-semibold text-sm text-stone-800 dark:text-neutral-200">Rp. {{ number_format($orderData['total_tax'], 0, ',', '.') }}</dd>
                       <dt class="col-span-8 text-sm text-stone-800 dark:text-neutral-200">Delivery:</dt>
                       <dd class="col-span-4 text-end font-semibold text-sm text-stone-800 dark:text-neutral-200">Rp. 0</dd>
                       <dt class="col-span-8 text-sm text-stone-800 dark:text-neutral-200">Grand Total:</dt>
-                      <dd class="col-span-4 text-end font-semibold text-lg text-green-700 dark:text-neutral-200">Rp. 1.639.000</dd>
+                      <dd class="col-span-4 text-end font-semibold text-lg text-green-700 dark:text-neutral-200">Rp. {{ number_format($orderData['grand_total_amount'], 0, ',', '.') }}</dd>
                     </dl>
                     <!-- End List -->
                   </div>
@@ -1844,7 +1857,7 @@
                   <div class="pt-2 pb-4 px-5 flex flex-col justify-between h-full">
                     <!-- Card -->
                     <div class="h-full flex items-center gap-x-3 mt-3 sm:mt-5">
-                        <img class="shrink-0 size-12 object-contain p-1 bg-gray-100 rounded-lg dark:bg-neutral-800" src="../assets/img/bank/bni.svg" alt="BNI Logo">
+                        <img class="shrink-0 size-12 object-contain p-1 bg-gray-100 rounded-lg dark:bg-neutral-800" src="{{ asset('assets/img/bank/bni.svg') }}" alt="BNI Logo">
                         <div class="grow h-full flex flex-col">
                           <div>
                             <!-- List -->
@@ -1874,7 +1887,7 @@
                     <!-- End Card -->
                     <!-- Card -->
                     <div class="h-full flex items-center gap-x-3 mt-3 sm:mt-5">
-                        <img class="shrink-0 size-12 object-contain p-1 bg-gray-100 rounded-lg dark:bg-neutral-800" src="../assets/img/bank/mandiri.svg" alt="Mandiri Logo">
+                        <img class="shrink-0 size-12 object-contain p-1 bg-gray-100 rounded-lg dark:bg-neutral-800" src="{{ asset('assets/img/bank/mandiri.svg') }}" alt="Mandiri Logo">
                         <div class="grow h-full flex flex-col">
                           <div>
                             <!-- List -->
@@ -1918,11 +1931,15 @@
                           <polyline points="17 8 12 3 7 8" />
                           <line x1="12" x2="12" y1="3" y2="15" />
                         </svg>
-                        <span>Add an attachment</span>
+                        <span id="payment-proof-filename">Add an attachment</span>
 
                         <!-- Input file tersembunyi -->
-                        <input id="payment-proof-input" type="file" class="sr-only" name="payment_proof" accept="image/*,.pdf">
+                        <input id="payment-proof-input" type="file" class="sr-only" name="proof" accept="image/jpeg,image/png" required aria-describedby="payment-proof-help" @error('proof') aria-invalid="true" @enderror>
                       </label>
+                      <p id="payment-proof-help" class="text-xs text-stone-600 dark:text-neutral-400">JPG/JPEG or PNG, up to 2 MB.</p>
+                      @error('proof')
+                        <p class="text-xs text-red-600" role="alert">{{ $message }}</p>
+                      @enderror
                     </div>
 
                     <!-- Alert Privasi (Tema Biru) -->
@@ -1951,12 +1968,12 @@
               </div>
               <!-- Button Group -->
               <div class="mt-3 flex justify-end gap-x-3">
-                <button type="button" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-stone-200 bg-white text-stone-800 shadow-2xs hover:bg-stone-50 disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:bg-stone-50 dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-300 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700">
+                <a href="{{ route('front.customer_data') }}" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-stone-200 bg-white text-stone-800 shadow-2xs hover:bg-stone-50 disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:bg-stone-50 dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-300 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700">
                   Cancel
-                </button>
-                <a type="button" href="../../shop-marketplace/order-confirmation.html" class="py-2 px-10 w-full inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-green-600 text-white hover:bg-green-700 disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:ring-2 focus:ring-green-500">
-                  Confirm Now
                 </a>
+                <button type="submit" class="py-2 px-10 w-full inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-green-600 text-white hover:bg-green-700 disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:ring-2 focus:ring-green-500">
+                  Confirm Now
+                </button>
               </div>
               <!-- End Button Group -->
             </div>
@@ -2140,15 +2157,20 @@
 
 
   <!-- JS PLUGINS -->
-  <script src="../assets/vendor/@floating-ui/core/dist/floating-ui.core.umd.min.js"></script>
-  <script src="../assets/vendor/@floating-ui/dom/dist/floating-ui.dom.umd.min.js"></script>
+  <script>
+    document.getElementById('payment-proof-input').addEventListener('change', (event) => {
+      document.getElementById('payment-proof-filename').textContent = event.target.files[0]?.name ?? 'Add an attachment';
+    });
+  </script>
+  <script src="{{ asset('assets/vendor/@floating-ui/core/dist/floating-ui.core.umd.min.js') }}"></script>
+  <script src="{{ asset('assets/vendor/@floating-ui/dom/dist/floating-ui.dom.umd.min.js') }}"></script>
   <!-- Required plugins -->
-  <script src="../assets/vendor/preline/dist/index.js?v=3.0.1"></script>
+  <script src="{{ asset('assets/vendor/preline/dist/index.js') }}?v=3.0.1"></script>
   <!-- Clipboard -->
-  <script src="../assets/vendor/clipboard/dist/clipboard.min.js"></script>
-  <script src="../assets/js/hs-copy-clipboard-helper.js"></script>
+  <script src="{{ asset('assets/vendor/clipboard/dist/clipboard.min.js') }}"></script>
+  <script src="{{ asset('assets/js/hs-copy-clipboard-helper.js') }}"></script>
 
-  <script src="../assets/vendor/lodash/lodash.min.js"></script>
+  <script src="{{ asset('assets/vendor/lodash/lodash.min.js') }}"></script>
   <script>
     function contentToSwitch() {
       const BREAKPOINTS = {
