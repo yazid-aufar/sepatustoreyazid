@@ -1,3 +1,15 @@
+@php
+    $shoe = $data['shoe']->loadMissing(['brand', 'category']);
+    $orderData = $data['orderData'];
+    $thumbnailUrl = null;
+
+    if (filled($shoe->thumbnail)) {
+        $storageDisk = \Illuminate\Support\Facades\Storage::disk();
+        $thumbnailUrl = $storageDisk->providesTemporaryUrls()
+            ? $storageDisk->temporaryUrl($shoe->thumbnail, now()->addHour())
+            : $storageDisk->url($shoe->thumbnail);
+    }
+@endphp
 <!DOCTYPE html>
 <html lang="en" class="relative min-h-full scroll-smooth">
 <head>
@@ -27,13 +39,13 @@
   <title>Shop Product Detail | Preline Pro | Preline UI, crafted with Tailwind CSS</title>
 
   <!-- Favicon -->
-  <link rel="shortcut icon" href="../favicon.ico">
+  <link rel="shortcut icon" href="{{ asset('favicon.ico') }}">
 
   <!-- Font -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
   <!-- CSS HS -->
-  <link rel="stylesheet" href="../assets/css/main.min.css?v=3.0.1">
+  <link rel="stylesheet" href="{{ asset('assets/css/main.min.css') }}?v=3.0.1">
 
   <!-- Theme Check and Update -->
   <script>
@@ -67,7 +79,7 @@
         <ul class="flex flex-wrap items-center gap-3">
           <li class="inline-flex items-center relative text-xs text-gray-500 ps-3.5 first:ps-0 first:after:hidden after:absolute after:top-1/2 after:start-0 after:inline-block after:w-px after:h-2.5 after:bg-gray-400 after:rounded-full after:-translate-y-1/2 after:rotate-12 dark:text-neutral-500 dark:after:bg-neutral-600">
             <button type="button" class="flex items-center gap-x-1.5 text-start text-xs text-gray-500 hover:text-gray-800 focus:outline-hidden focus:text-gray-800 dark:text-neutral-200 dark:hover:text-neutral-400 dark:focus:text-neutral-400" data-hs-overlay="#hs-pro-shmnrsm">
-              <img class="shrink-0 size-3.5 rounded-full" src="../assets/vendor/svg-country-flags/png250px/us.png" alt="English">
+              <img class="shrink-0 size-3.5 rounded-full" src="{{ asset('assets/vendor/svg-country-flags/png250px/us.png') }}" alt="English">
               English · USD
             </button>
           </li>
@@ -1591,15 +1603,15 @@
           <ol class=" flex items-center whitespace-nowrap">
             <li class="flex items-center">
 
-              <a class="py-0.5 px-1.5 flex items-center gap-x-1 text-sm rounded-md text-gray-600 hover:bg-gray-100 focus:bg-gray-100 focus:outline-hidden dark:text-neutral-400 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800" href="listing.html">
-                Sneakers
+              <a class="py-0.5 px-1.5 flex items-center gap-x-1 text-sm rounded-md text-gray-600 hover:bg-gray-100 focus:bg-gray-100 focus:outline-hidden dark:text-neutral-400 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800" href="{{ $shoe->category ? route('front.category', $shoe->category->slug) : route('front.index') }}">
+                {{ $shoe->category?->name ?? '-' }}
               </a>
               <svg class="shrink-0 overflow-visible size-4  text-gray-400 dark:text-neutral-600" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                 <path d="M6 13L10 3" stroke="currentColor" stroke-linecap="round"></path>
               </svg>
             </li>
             <li class="capitalize ps-1.5 flex items-center truncate font-semibold text-gray-800 dark:text-neutral-200 text-sm truncate">
-              <span class="truncate">air jordan 1 low - obsidian university gold</span>
+              <span class="truncate">{{ $shoe->name }}</span>
             </li>
           </ol>
           <!-- End Breadcrumb -->
@@ -1607,7 +1619,10 @@
 
         <div class="py-2 sm:pb-0 sm:pt-5 space-y-5">
         <!-- Form -->
-        <form>
+        <form action="{{ route('front.save_customer_data') }}" method="POST">
+          @csrf
+          <input type="hidden" name="name" value="{{ $data['orderData']['name'] ?? '' }}">
+          <input type="hidden" name="email" value="{{ $data['orderData']['email'] ?? '' }}">
           <!-- Grid -->
           <div class="grid grid-cols-1 lg:grid-cols-6 gap-5">
             <div class="lg:col-span-4 space-y-5">
@@ -1628,7 +1643,7 @@
 
                   <!-- Input -->
                   <div>
-                    <label for="hs-pro-epdnm" class="block mb-2 text-sm font-medium text-stone-800 dark:text-neutral-200">
+                    <label for="address" class="block mb-2 text-sm font-medium text-stone-800 dark:text-neutral-200">
                       Full Address
                       <span class="hs-tooltip inline-block align-middle">
 
@@ -1637,13 +1652,13 @@
                         </span>
                       </span>
                     </label>
-                    <input id="hs-pro-daufvd" type="text" class="py-1.5 sm:py-2 px-3 block w-full border-stone-200 rounded-lg sm:text-sm text-stone-800 placeholder:text-stone-500 focus:z-10 focus:border-green-600 focus:ring-green-600 dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-200 dark:placeholder:text-neutral-500 dark:focus:outline-hidden dark:focus:ring-1 dark:focus:ring-neutral-600" placeholder="Type your full address" >
+                    <textarea id="address" name="address" rows="3" autocomplete="street-address" required class="py-1.5 sm:py-2 px-3 block w-full border-stone-200 rounded-lg sm:text-sm text-stone-800 placeholder:text-stone-500 focus:z-10 focus:border-green-600 focus:ring-green-600 dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-200 dark:placeholder:text-neutral-500 dark:focus:outline-hidden dark:focus:ring-1 dark:focus:ring-neutral-600" placeholder="Type your full address">{{ old('address', $data['orderData']['address'] ?? '') }}</textarea>
                   </div>
                   <!-- End Input -->
 
                   <!-- Input -->
                   <div>
-                    <label for="hs-pro-epdnm" class="block mb-2 text-sm font-medium text-stone-800 dark:text-neutral-200">
+                    <label for="phone" class="block mb-2 text-sm font-medium text-stone-800 dark:text-neutral-200">
                       Phone Number
                       <span class="hs-tooltip inline-block align-middle">
 
@@ -1652,13 +1667,13 @@
                         </span>
                       </span>
                     </label>
-                    <input id="hs-pro-daufvd" type="text" class="py-1.5 sm:py-2 px-3 block w-full border-stone-200 rounded-lg sm:text-sm text-stone-800 placeholder:text-stone-500 focus:z-10 focus:border-green-600 focus:ring-green-600 dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-200 dark:placeholder:text-neutral-500 dark:focus:outline-hidden dark:focus:ring-1 dark:focus:ring-neutral-600" placeholder="Type your phone number" >
+                    <input id="phone" type="tel" name="phone" value="{{ old('phone', $data['orderData']['phone'] ?? '') }}" autocomplete="tel" maxlength="255" required class="py-1.5 sm:py-2 px-3 block w-full border-stone-200 rounded-lg sm:text-sm text-stone-800 placeholder:text-stone-500 focus:z-10 focus:border-green-600 focus:ring-green-600 dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-200 dark:placeholder:text-neutral-500 dark:focus:outline-hidden dark:focus:ring-1 dark:focus:ring-neutral-600" placeholder="Type your phone number" >
                   </div>
                   <!-- End Input -->
 
                   <!-- Input -->
                   <div>
-                    <label for="hs-pro-epdnm" class="block mb-2 text-sm font-medium text-stone-800 dark:text-neutral-200">
+                    <label for="city" class="block mb-2 text-sm font-medium text-stone-800 dark:text-neutral-200">
                       City
                       <span class="hs-tooltip inline-block align-middle">
 
@@ -1667,13 +1682,13 @@
                         </span>
                       </span>
                     </label>
-                    <input id="hs-pro-daufvd" type="text" class="py-1.5 sm:py-2 px-3 block w-full border-stone-200 rounded-lg sm:text-sm text-stone-800 placeholder:text-stone-500 focus:z-10 focus:border-green-600 focus:ring-green-600 dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-200 dark:placeholder:text-neutral-500 dark:focus:outline-hidden dark:focus:ring-1 dark:focus:ring-neutral-600" placeholder="Type your city" >
+                    <input id="city" type="text" name="city" value="{{ old('city', $data['orderData']['city'] ?? '') }}" autocomplete="address-level2" maxlength="255" required class="py-1.5 sm:py-2 px-3 block w-full border-stone-200 rounded-lg sm:text-sm text-stone-800 placeholder:text-stone-500 focus:z-10 focus:border-green-600 focus:ring-green-600 dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-200 dark:placeholder:text-neutral-500 dark:focus:outline-hidden dark:focus:ring-1 dark:focus:ring-neutral-600" placeholder="Type your city" >
                   </div>
                   <!-- End Input -->
 
                   <!-- Input -->
                   <div>
-                    <label for="hs-pro-epdnm" class="block mb-2 text-sm font-medium text-stone-800 dark:text-neutral-200">
+                    <label for="post_code" class="block mb-2 text-sm font-medium text-stone-800 dark:text-neutral-200">
                       Post Code
                       <span class="hs-tooltip inline-block align-middle">
 
@@ -1682,7 +1697,7 @@
                         </span>
                       </span>
                     </label>
-                    <input id="hs-pro-daufvd" type="text" class="py-1.5 sm:py-2 px-3 block w-full border-stone-200 rounded-lg sm:text-sm text-stone-800 placeholder:text-stone-500 focus:z-10 focus:border-green-600 focus:ring-green-600 dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-200 dark:placeholder:text-neutral-500 dark:focus:outline-hidden dark:focus:ring-1 dark:focus:ring-neutral-600" placeholder="Type your post code" >
+                    <input id="post_code" type="text" name="post_code" value="{{ old('post_code', $data['orderData']['post_code'] ?? '') }}" autocomplete="postal-code" maxlength="255" required class="py-1.5 sm:py-2 px-3 block w-full border-stone-200 rounded-lg sm:text-sm text-stone-800 placeholder:text-stone-500 focus:z-10 focus:border-green-600 focus:ring-green-600 dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-200 dark:placeholder:text-neutral-500 dark:focus:outline-hidden dark:focus:ring-1 dark:focus:ring-neutral-600" placeholder="Type your post code" >
                   </div>
                   <!-- End Input -->
 
@@ -1719,9 +1734,9 @@
                       <!-- End Button -->
 
                       <div class="flex justify-end">
-                        <a type="button" href="../../shop-marketplace/payment.html" class="py-1.5 px-3 inline-flex items-center gap-x-1.5 text-sm font-medium rounded-md border border-transparent bg-green-600 text-white hover:bg-green-700 disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:ring-2 focus:ring-green-500">
+                        <button type="submit" class="py-1.5 px-3 inline-flex items-center gap-x-1.5 text-sm font-medium rounded-md border border-transparent bg-green-600 text-white hover:bg-green-700 disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:ring-2 focus:ring-green-500">
                           Continue
-                        </a>
+                        </button>
                       </div>
                     </div>
                   </div>
@@ -1755,31 +1770,31 @@
                       <!-- Item -->
                       <div class=" flex gap-x-5">
                         <div class="relative">
-                          <img class="shrink-0 w-20 h-28 object-contain rounded-lg dark:bg-neutral-700" src="../assets/img/product/NIKE-F34KBNIK5-NIKIO7448400-Navy 01-.webp" alt="Product Image">
+                          <img class="shrink-0 w-20 h-28 object-contain rounded-lg dark:bg-neutral-700" src="{{ $thumbnailUrl ?? asset('assets/img/logo/logo-short.png') }}" alt="{{ $shoe->name }}">
                         </div>
 
                         <div class="grow flex flex-col">
                           <label for="hs-pro-epdsku" class="block mb-2 text-sm font-medium text-stone-800 dark:text-neutral-200 capitalize">
-                            air jordan 1 low - obsidian university gold
+                            {{ $shoe->name }}
                           </label>
 
 
                           <ul class="mt-1.5 space-y-1">
                             <li class="flex justify-between gap-x-4 text-xs text-gray-500 dark:text-neutral-500">
                               <span>Brand:</span>
-                              <span class="text-right">Nike</span>
+                              <span class="text-right">{{ $shoe->brand?->name ?? '-' }}</span>
                             </li>
                             <li class="flex justify-between gap-x-4 text-xs text-gray-500 dark:text-neutral-500">
                               <span>Category:</span>
-                              <span class="text-right">Sneakers</span>
+                              <span class="text-right">{{ $shoe->category?->name ?? '-' }}</span>
                             </li>
                             <li class="flex justify-between gap-x-4 text-xs text-gray-500 dark:text-neutral-500">
                               <span>Size:</span>
-                              <span class="text-right">EU 42</span>
+                              <span class="text-right">{{ $orderData['shoe_size'] ?? '-' }}</span>
                             </li>
                             <li class="flex justify-between gap-x-4 text-xs text-gray-500 dark:text-neutral-500">
                               <span>Quantity:</span>
-                              <span class="text-right">2 Pcs</span>
+                              <span class="text-right">{{ $orderData['quantity'] }} Pcs</span>
                             </li>
                           </ul>
                         </div>
@@ -1816,17 +1831,17 @@
                     <!-- List -->
                     <dl class="mt-4 grid grid-cols-12 gap-2 pe-1">
                       <dt class="col-span-8 text-sm text-stone-800 dark:text-neutral-200">Sub Total:</dt>
-                      <dd class="col-span-4 text-end font-semibold text-sm text-stone-800 dark:text-neutral-200">Rp. 1.939.000</dd>
+                      <dd class="col-span-4 text-end font-semibold text-sm text-stone-800 dark:text-neutral-200">Rp. {{ number_format($orderData['sub_total_amount'], 0, ',', '.') }}</dd>
                       <dt class="col-span-8 text-sm text-stone-800 dark:text-neutral-200">Promo Code:</dt>
-                      <dd class="col-span-4 text-end font-semibold text-sm text-stone-800 dark:text-neutral-200">GAJIHAN</dd>
+                      <dd class="col-span-4 text-end font-semibold text-sm text-stone-800 dark:text-neutral-200">{{ $orderData['promo_code'] ?? '-' }}</dd>
                       <dt class="col-span-8 text-sm text-stone-800 dark:text-neutral-200">Discount:</dt>
-                      <dd class="col-span-4 text-end font-semibold text-sm text-green-700 dark:text-neutral-200">- Rp. 300.000</dd>
+                      <dd class="col-span-4 text-end font-semibold text-sm text-green-700 dark:text-neutral-200">- Rp. {{ number_format($orderData['discount_amount'], 0, ',', '.') }}</dd>
                       <dt class="col-span-8 text-sm text-stone-800 dark:text-neutral-200">PPN 11%:</dt>
-                      <dd class="col-span-4 text-end font-semibold text-sm text-stone-800 dark:text-neutral-200">Rp. 213.290</dd>
+                      <dd class="col-span-4 text-end font-semibold text-sm text-stone-800 dark:text-neutral-200">Rp. {{ number_format($orderData['total_tax'], 0, ',', '.') }}</dd>
                       <dt class="col-span-8 text-sm text-stone-800 dark:text-neutral-200">Delivery:</dt>
                       <dd class="col-span-4 text-end font-semibold text-sm text-stone-800 dark:text-neutral-200">Rp. 0</dd>
                       <dt class="col-span-8 text-sm text-stone-800 dark:text-neutral-200">Grand Total:</dt>
-                      <dd class="col-span-4 text-end font-semibold text-lg text-green-700 dark:text-neutral-200">Rp. 1.639.000</dd>
+                      <dd class="col-span-4 text-end font-semibold text-lg text-green-700 dark:text-neutral-200">Rp. {{ number_format($orderData['grand_total_amount'], 0, ',', '.') }}</dd>
                     </dl>
                     <!-- End List -->
                   </div>
@@ -2015,15 +2030,15 @@
 
 
   <!-- JS PLUGINS -->
-  <script src="../assets/vendor/@floating-ui/core/dist/floating-ui.core.umd.min.js"></script>
-  <script src="../assets/vendor/@floating-ui/dom/dist/floating-ui.dom.umd.min.js"></script>
+  <script src="{{ asset('assets/vendor/@floating-ui/core/dist/floating-ui.core.umd.min.js') }}"></script>
+  <script src="{{ asset('assets/vendor/@floating-ui/dom/dist/floating-ui.dom.umd.min.js') }}"></script>
   <!-- Required plugins -->
-  <script src="../assets/vendor/preline/dist/index.js?v=3.0.1"></script>
+  <script src="{{ asset('assets/vendor/preline/dist/index.js') }}?v=3.0.1"></script>
   <!-- Clipboard -->
-  <script src="../assets/vendor/clipboard/dist/clipboard.min.js"></script>
-  <script src="../assets/js/hs-copy-clipboard-helper.js"></script>
+  <script src="{{ asset('assets/vendor/clipboard/dist/clipboard.min.js') }}"></script>
+  <script src="{{ asset('assets/js/hs-copy-clipboard-helper.js') }}"></script>
 
-  <script src="../assets/vendor/lodash/lodash.min.js"></script>
+  <script src="{{ asset('assets/vendor/lodash/lodash.min.js') }}"></script>
   <script>
     function contentToSwitch() {
       const BREAKPOINTS = {
