@@ -310,7 +310,11 @@
                   <div class=" flex gap-x-5">
                     <div class="relative">
 
-                      <img class="shrink-0 w-20 h-28 object-contain rounded-lg dark:bg-neutral-700" src="{{ $thumbnailUrl ?? asset('assets/img/logo/logo-short.png') }}" alt="{{ $orderDetails->shoe->name }}">
+                      <img class="shrink-0 w-20 h-28 object-contain rounded-lg dark:bg-neutral-700" src="{{ filled($orderDetails->shoe->thumbnail)
+                        ? (\Illuminate\Support\Facades\Storage::disk(config('filament.default_filesystem_disk'))->providesTemporaryUrls()
+                            ? \Illuminate\Support\Facades\Storage::disk(config('filament.default_filesystem_disk'))->temporaryUrl($orderDetails->shoe->thumbnail, now()->addHour())
+                            : \Illuminate\Support\Facades\Storage::disk(config('filament.default_filesystem_disk'))->url($orderDetails->shoe->thumbnail))
+                        : asset('assets/img/logo/logo-short.png') }}" alt="{{ $orderDetails->shoe->name }}">
                     </div>
 
                     <div class="grow flex flex-col">
@@ -342,6 +346,7 @@
                       </div>
 
                       <p>
+                        @if (!$orderDetails->is_paid)
                         <span class="py-1.5 px-2 inline-flex items-center gap-x-1.5 text-xs font-medium bg-yellow-100 text-yellow-800 rounded-full dark:bg-yellow-500/10 dark:text-yellow-500">
                             <svg class="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                               <circle cx="12" cy="12" r="10"></circle>
@@ -349,6 +354,7 @@
                             </svg>
                             Pending
                         </span>
+                        @else
                         <span class="py-1.5 px-2 inline-flex items-center gap-x-1.5 text-xs font-medium bg-green-100 text-green-800 rounded-full dark:bg-green-500/10 dark:text-green-500">
                           <svg class="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z" />
@@ -356,6 +362,7 @@
                           </svg>
                           Success
                         </span>
+                        @endif
                       </p>
 
                     </div>
@@ -452,17 +459,17 @@
                   <div class="pt-2 pb-4 px-5">
                     <dl class="mt-4 grid grid-cols-12 gap-2 pe-1">
                       <dt class="col-span-8 text-sm text-stone-800 dark:text-neutral-200">Sub Total:</dt>
-                      <dd class="col-span-4 text-end font-semibold text-sm text-stone-800 dark:text-neutral-200">Rp. 1.939.000</dd>
+                      <dd class="col-span-4 text-end font-semibold text-sm text-stone-800 dark:text-neutral-200">Rp. {{ number_format($orderDetails->sub_total_amount, 0, ',', '.') }}</dd>
                       <dt class="col-span-8 text-sm text-stone-800 dark:text-neutral-200">Promo Code:</dt>
-                      <dd class="col-span-4 text-end font-semibold text-sm text-stone-800 dark:text-neutral-200">GAJIHAN</dd>
+                      <dd class="col-span-4 text-end font-semibold text-sm text-stone-800 dark:text-neutral-200">{{ $orderDetails->promoCode?->code ?? '-' }}</dd>
                       <dt class="col-span-8 text-sm text-stone-800 dark:text-neutral-200">Discount:</dt>
-                      <dd class="col-span-4 text-end font-semibold text-sm text-green-700 dark:text-neutral-200">- Rp. 300.000</dd>
+                      <dd class="col-span-4 text-end font-semibold text-sm text-green-700 dark:text-neutral-200">- Rp. {{ number_format($orderDetails->discount_amount, 0, ',', '.') }}</dd>
                       <dt class="col-span-8 text-sm text-stone-800 dark:text-neutral-200">PPN 11%:</dt>
-                      <dd class="col-span-4 text-end font-semibold text-sm text-stone-800 dark:text-neutral-200">Rp. 213.290</dd>
+                      <dd class="col-span-4 text-end font-semibold text-sm text-stone-800 dark:text-neutral-200">Rp. {{ number_format($orderDetails->grand_total_amount + $orderDetails->discount_amount - $orderDetails->sub_total_amount, 0, ',', '.') }}</dd>
                       <dt class="col-span-8 text-sm text-stone-800 dark:text-neutral-200">Delivery:</dt>
                       <dd class="col-span-4 text-end font-semibold text-sm text-stone-800 dark:text-neutral-200">Rp. 0</dd>
                       <dt class="col-span-8 text-sm text-stone-800 dark:text-neutral-200">Grand Total:</dt>
-                      <dd class="col-span-4 text-end font-semibold text-lg text-green-700 dark:text-neutral-200">Rp. 1.639.000</dd>
+                      <dd class="col-span-4 text-end font-semibold text-lg text-green-700 dark:text-neutral-200">Rp. {{ number_format($orderDetails->grand_total_amount, 0, ',', '.') }}</dd>
                     </dl>
                   </div>
                 </div>
@@ -511,7 +518,7 @@
                           </span>
                         </div>
                         <p class="text-sm font-semibold text-stone-800 dark:text-neutral-200">
-                          Yazid Aufar
+                          {{ $orderDetails->name }}
                         </p>
                       </div>
 
@@ -525,7 +532,7 @@
                           </span>
                         </div>
                         <p class="text-sm font-semibold text-stone-800 dark:text-neutral-200">
-                          +62 812-3456-7890
+                          {{ $orderDetails->phone }}
                         </p>
                       </div>
                     </div>
@@ -544,7 +551,7 @@
                           </span>
                         </div>
                         <p class="text-sm font-semibold text-stone-800 dark:text-neutral-200">
-                          yazidaufar@gmail.com
+                          {{ $orderDetails->email }}
                         </p>
                       </div>
 
@@ -559,7 +566,7 @@
                           </span>
                         </div>
                         <p class="text-sm font-semibold text-stone-800 dark:text-neutral-200">
-                          No. 12, RT. 01 RW. 02, Kel. Sungai Baru, Kec. Banjarmasin Tengah, Kota Banjarmasin, Kalimantan Selatan 70123
+                          {{ $orderDetails->address }}, {{ $orderDetails->city }} {{ $orderDetails->post_code }}
                         </p>
                       </div>
                     </div>
