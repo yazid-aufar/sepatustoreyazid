@@ -244,7 +244,7 @@
                         </span>
                       </div>
                       <p class="text-sm font-semibold text-stone-800 dark:text-neutral-200">
-                        EU {{ $shoeSize ?? '-' }}
+                        {{ $shoeSize ?? '-' }}
                       </p>
                     </div>
                   </div>

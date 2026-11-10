@@ -295,11 +295,32 @@
 
               <!-- Products Card -->
               <div class="mb-5 flex flex-col bg-white border border-stone-200 overflow-hidden rounded-xl shadow-2xs dark:bg-neutral-800 dark:border-neutral-700">
+
                 <!-- Header -->
                 <div class="py-3 px-5 flex justify-between items-center gap-x-5 border-b border-stone-200 dark:border-neutral-700">
-                  <h2 class="inline-block font-semibold text-stone-800 dark:text-neutral-200">
-                    Your Order
-                  </h2>
+                  <div class="flex items-center justify-between gap-x-5 w-full">
+                    <!-- Area Klik Accordion Toggle (Sisi Kiri) -->
+                    <button class="hs-accordion-toggle group flex items-center gap-x-3 grow text-start focus:outline-hidden" aria-expanded="true" aria-controls="hs-booking-content">
+                      <div class="flex shrink-0 justify-center items-center size-10 bg-green-100 text-green-700 rounded-lg dark:bg-green-500/20 dark:text-green-400">
+                        <svg class="shrink-0 size-5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                          <path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"/>
+                          <path d="M13 5v2"/>
+                          <path d="M13 11v2"/>
+                          <path d="M13 17v2"/>
+                        </svg>
+                      </div>
+                      <div>
+                        <span class="block text-sm text-gray-500 dark:text-neutral-400">Booking ID</span>
+                        <span id="booking-id-val" class="text-lg font-medium font-bold text-gray-800 dark:text-neutral-100">{{ $orderDetails->booking_trx_id }}</span>
+                      </div>
+                    </button>
+
+                    <!-- Tombol Copy ID -->
+                    <h2 class="inline-block font-semibold text-stone-800 dark:text-neutral-200">
+                        Your Order
+                    </h2>
+                  </div>
+
                 </div>
                 <!-- End Header -->
 

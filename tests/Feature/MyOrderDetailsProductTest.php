@@ -12,6 +12,16 @@ use Tests\TestCase;
 
 class MyOrderDetailsProductTest extends TestCase
 {
+    public function test_booking_id_displays_the_transaction_booking_id(): void
+    {
+        $order = $this->makeOrder(new Shoe(['name' => 'Sepatu Pilihan']));
+        $order->id = 42;
+        $order->booking_trx_id = 'SS1234';
+
+        $this->view('order.my_order_details', ['orderDetails' => $order])
+            ->assertSee('id="booking-id-val" class="text-lg font-medium font-bold text-gray-800 dark:text-neutral-100">SS1234</span>', false);
+    }
+
     public function test_order_details_displays_the_ordered_shoe(): void
     {
         Storage::fake('public');
