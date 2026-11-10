@@ -6,6 +6,7 @@ use App\Http\Requests\StoreOrderRequest;
 use App\Http\Requests\StoreCustomerDataRequest;
 use App\Http\Requests\StorePaymentRequest;
 use App\Http\Requests\StoreCheckBookingRequest;
+
 use App\Services\OrderService;
 use App\Models\Shoe;
 use App\Models\ProductTransaction;
@@ -117,8 +118,9 @@ class OrderController extends Controller
         return view('order.order_finished', compact(
             'productTransaction', 'shoe', 'shoeSize', 'thumbnailUrl', 'unitPrice', 'totalTax'
         ));
+    }
 
-        public function checkBooking()
+    public function checkBooking()
         {
             return view('order.my_order');
         }
@@ -139,4 +141,4 @@ class OrderController extends Controller
 
     }
 
-}
+
