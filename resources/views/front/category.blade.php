@@ -1,3 +1,17 @@
+@php
+    $shoes = $category->shoes()->with('brand')->get();
+    $disk = \Illuminate\Support\Facades\Storage::disk(config('filament.default_filesystem_disk'));
+
+    $imageUrl = static function (?string $path) use ($disk): string {
+        if (blank($path)) {
+            return asset('assets/img/logo/logo-short.png');
+        }
+
+        return $disk->providesTemporaryUrls()
+            ? $disk->temporaryUrl($path, now()->addHour())
+            : $disk->url($path);
+    };
+@endphp
 <!DOCTYPE html>
 <html lang="en" class="relative min-h-full">
 <head>
@@ -310,13 +324,13 @@
       <!-- End Header -->
 
       <!-- Category Card -->
-      <a class="block flex items-center bg-white border border-gray-200 hover:border-gray-300 rounded-xl focus:outline-hidden focus:border-gray-300 dark:bg-neutral-900 dark:border-neutral-700 dark:hover:border-neutral-600 dark:focus:border-neutral-600" href="../../pro/shop-marketplace/listing.html">
+      <a class="block flex items-center bg-white border border-gray-200 hover:border-gray-300 rounded-xl focus:outline-hidden focus:border-gray-300 dark:bg-neutral-900 dark:border-neutral-700 dark:hover:border-neutral-600 dark:focus:border-neutral-600" href="{{ route('front.category', ['category' => $category->slug]) }}">
         <div class="relative shrink-0 w-20 sm:w-28 h-20">
-          <img class="size-full absolute inset-0 object-cover object-center rounded-s-xl" src="../assets/img/category/running.jpg" alt="Product Image">
+          <img class="size-full absolute inset-0 object-cover object-center rounded-s-xl" src="{{ $imageUrl($category->icon) }}" alt="{{ $category->name }}">
         </div>
         <div class="grow p-3">
           <span class="block font-medium text-sm text-gray-800 dark:text-neutral-200">
-            Running
+            {{ $category->name }}
           </span>
         </div>
       </a>
@@ -339,295 +353,46 @@
       <!-- Grid -->
       <div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-y-10 gap-x-4">
 
+        @forelse ($shoes as $shoe)
+        @php($shoeUrl = route('front.details', ['shoe' => $shoe->slug]))
         <!-- Card -->
         <div class="h-full flex flex-col">
           <div class="group relative">
             <div class="relative">
-              <a class="block shrink-0 relative w-full h-48 md:h-64 overflow-hidden rounded-xl focus:outline-hidden" href="../../pro/shop-marketplace/product-detail.html">
-                <img class="size-full absolute inset-0 object-cover object-center group-hover:scale-105 group-focus:scale-105 transition-transform duration-500 ease-in-out rounded-xl" src="../assets/img/product/01-ADIDAS-FFSSBADI5-ADIB75806-White.webp" alt="Product Image">
+              <a class="block shrink-0 relative w-full h-48 md:h-64 overflow-hidden rounded-xl focus:outline-hidden" href="{{ $shoeUrl }}">
+                <img class="size-full absolute inset-0 object-cover object-center group-hover:scale-105 group-focus:scale-105 transition-transform duration-500 ease-in-out rounded-xl" src="{{ $imageUrl($shoe->thumbnail) }}" alt="{{ $shoe->name }}">
               </a>
             </div>
 
-            <a class="after:z-1 after:absolute after:inset-0" href="../../pro/shop-marketplace/product-detail.html"></a>
+            <a class="after:z-1 after:absolute after:inset-0" href="{{ $shoeUrl }}"></a>
 
             <div class="pt-3">
               <h4 class="font-medium text-sm text-gray-800 dark:text-neutral-200 capitalize">
-                Samba OG Men's Sneaker Shoes - Ftwr White
+                {{ $shoe->name }}
               </h4>
               <div class="mt-1 flex flex-wrap items-center gap-1">
                 <span class="font-semibold text-emerald-600 dark:text-emerald-500">
-                  Rp <span class="text-sm">2.200.000</span>
+                  Rp <span class="text-sm">{{ number_format($shoe->price, 0, ',', '.') }}</span>
                 </span>
                 <span class="ms-auto text-sm text-gray-500 dark:text-neutral-500">
-                  Adidas
+                  {{ $shoe->brand?->name ?? '-' }}
                 </span>
               </div>
             </div>
           </div>
         </div>
         <!-- End Card -->
-
-        <!-- Card -->
-        <div class="h-full flex flex-col">
-          <div class="group relative">
-            <div class="relative">
-              <a class="block shrink-0 relative w-full h-48 md:h-64 overflow-hidden rounded-xl focus:outline-hidden" href="../../pro/shop-marketplace/product-detail.html">
-                <img class="size-full absolute inset-0 object-cover object-center group-hover:scale-105 group-focus:scale-105 transition-transform duration-500 ease-in-out rounded-xl" src="../assets/img/product/01-PUMA-FFSSEPMAA-PMA398846-02-Red.webp" alt="Product Image">
-              </a>
-            </div>
-
-            <a class="after:z-1 after:absolute after:inset-0" href="../../pro/shop-marketplace/product-detail.html"></a>
-
-            <div class="pt-3">
-              <h4 class="font-medium text-sm text-gray-800 dark:text-neutral-200 capitalize">
-                Speedcat OG Unisex Lifestyle Shoes - Red
-              </h4>
-              <div class="mt-1 flex flex-wrap items-center gap-1">
-                <span class="font-semibold text-emerald-600 dark:text-emerald-500">
-                  Rp <span class="text-sm">1.899.000</span>
-                </span>
-                <span class="ms-auto text-sm text-gray-500 dark:text-neutral-500">
-                  Puma
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- End Card -->
-
-        <!-- Card -->
-        <div class="h-full flex flex-col">
-          <div class="group relative">
-            <div class="relative">
-              <a class="block shrink-0 relative w-full h-48 md:h-64 overflow-hidden rounded-xl focus:outline-hidden" href="../../pro/shop-marketplace/product-detail.html">
-                <img class="size-full absolute inset-0 object-cover object-center group-hover:scale-105 group-focus:scale-105 transition-transform duration-500 ease-in-out rounded-xl" src="../assets/img/product/01-ADIDAS-F34RUADI5-ADIJR3419-Silver.webp" alt="Product Image">
-              </a>
-            </div>
-
-            <a class="after:z-1 after:absolute after:inset-0" href="../../pro/shop-marketplace/product-detail.html"></a>
-
-            <div class="pt-3">
-              <h4 class="font-medium text-sm text-gray-800 dark:text-neutral-200 capitalize">
-                Adizero EVO SL Men's Running Shoes - Silver
-              </h4>
-              <div class="mt-1 flex flex-wrap items-center gap-1">
-                <span class="font-semibold text-emerald-600 dark:text-emerald-500">
-                  Rp <span class="text-sm">2.000.000</span>
-                </span>
-                <span class="ms-auto text-sm text-gray-500 dark:text-neutral-500">
-                  Adidas
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- End Card -->
-
-        <!-- Card -->
-        <div class="h-full flex flex-col">
-          <div class="group relative">
-            <div class="relative">
-              <a class="block shrink-0 relative w-full h-48 md:h-64 overflow-hidden rounded-xl focus:outline-hidden" href="../../pro/shop-marketplace/product-detail.html">
-                <img class="size-full absolute inset-0 object-cover object-center group-hover:scale-105 group-focus:scale-105 transition-transform duration-500 ease-in-out rounded-xl" src="../assets/img/product/01-NIKE-F34KBNIK5-NIKCT2302100-White.webp" alt="Product Image">
-              </a>
-            </div>
-
-            <a class="after:z-1 after:absolute after:inset-0" href="../../pro/shop-marketplace/product-detail.html"></a>
-
-            <div class="pt-3">
-              <h4 class="font-medium text-sm text-gray-800 dark:text-neutral-200 capitalize">
-                Nike Air Force 1 '07 Men's Basketball Shoes - White
-              </h4>
-              <div class="mt-1 flex flex-wrap items-center gap-1">
-                <span class="font-semibold text-emerald-600 dark:text-emerald-500">
-                  Rp <span class="text-sm">1.500.000</span>
-                </span>
-                <span class="ms-auto text-sm text-gray-500 dark:text-neutral-500">
-                  Nike
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- End Card -->
-
-        <!-- Card -->
-        <div class="h-full flex flex-col">
-          <div class="group relative">
-            <div class="relative">
-              <a class="block shrink-0 relative w-full h-48 md:h-64 overflow-hidden rounded-xl focus:outline-hidden" href="../../pro/shop-marketplace/product-detail.html">
-                <img class="size-full absolute inset-0 object-cover object-center group-hover:scale-105 group-focus:scale-105 transition-transform duration-500 ease-in-out rounded-xl" src="../assets/img/product/01-NIKE-FFSSBNIK5-NIKIF0666300-Green.webp" alt="Product Image">
-              </a>
-            </div>
-
-            <a class="after:z-1 after:absolute after:inset-0" href="../../pro/shop-marketplace/product-detail.html"></a>
-
-            <div class="pt-3">
-              <h4 class="font-medium text-sm text-gray-800 dark:text-neutral-200 capitalize">
-                Field General Men's Sneakers - Light Army
-              </h4>
-              <div class="mt-1 flex flex-wrap items-center gap-1">
-                <span class="font-semibold text-emerald-600 dark:text-emerald-500">
-                  Rp <span class="text-sm">1.200.000</span>
-                </span>
-                <span class="ms-auto text-sm text-gray-500 dark:text-neutral-500">
-                  Nike
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- End Card -->
-
-        <!-- Card -->
-        <div class="h-full flex flex-col">
-          <div class="group relative">
-            <div class="relative">
-              <a class="block shrink-0 relative w-full h-48 md:h-64 overflow-hidden rounded-xl focus:outline-hidden" href="../../pro/shop-marketplace/product-detail.html">
-                <img class="size-full absolute inset-0 object-cover object-center group-hover:scale-105 group-focus:scale-105 transition-transform duration-500 ease-in-out rounded-xl" src="../assets/img/product/01-NEW-BALANCE-FFSSBNEWA-NEWM1906RA-Multicolor.webp" alt="Product Image">
-              </a>
-            </div>
-
-            <a class="after:z-1 after:absolute after:inset-0" href="../../pro/shop-marketplace/product-detail.html"></a>
-
-            <div class="pt-3">
-              <h4 class="font-medium text-sm text-gray-800 dark:text-neutral-200 capitalize">
-                1906 Men's Sneakers Shoes - Multi Color
-              </h4>
-              <div class="mt-1 flex flex-wrap items-center gap-1">
-                <span class="font-semibold text-emerald-600 dark:text-emerald-500">
-                  Rp <span class="text-sm">1.850.000</span>
-                </span>
-                <span class="ms-auto text-sm text-gray-500 dark:text-neutral-500">
-                  New Balance
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- End Card -->
-
-        <!-- Card -->
-        <div class="h-full flex flex-col">
-          <div class="group relative">
-            <div class="relative">
-              <a class="block shrink-0 relative w-full h-48 md:h-64 overflow-hidden rounded-xl focus:outline-hidden" href="../../pro/shop-marketplace/product-detail.html">
-                <img class="size-full absolute inset-0 object-cover object-center group-hover:scale-105 group-focus:scale-105 transition-transform duration-500 ease-in-out rounded-xl" src="../assets/img/product/0886-NIK305381007005011-1.webp" alt="Product Image">
-              </a>
-            </div>
-
-            <a class="after:z-1 after:absolute after:inset-0" href="../../pro/shop-marketplace/product-detail.html"></a>
-
-            <div class="pt-3">
-              <h4 class="font-medium text-sm text-gray-800 dark:text-neutral-200 capitalize">
-                Air Jordan 8 Retro Men's Basketball Shoes - Black-Lt Graphite
-              </h4>
-              <div class="mt-1 flex flex-wrap items-center gap-1">
-                <span class="font-semibold text-emerald-600 dark:text-emerald-500">
-                  Rp <span class="text-sm">3.230.000</span>
-                </span>
-                <span class="ms-auto text-sm text-gray-500 dark:text-neutral-500">
-                  Nike
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- End Card -->
-
-        <!-- Card -->
-        <div class="h-full flex flex-col">
-          <div class="group relative">
-            <div class="relative">
-              <a class="block shrink-0 relative w-full h-48 md:h-64 overflow-hidden rounded-xl focus:outline-hidden" href="../../pro/shop-marketplace/product-detail.html">
-                <img class="size-full absolute inset-0 object-cover object-center group-hover:scale-105 group-focus:scale-105 transition-transform duration-500 ease-in-out rounded-xl" src="../assets/img/product/0886-CONA24322CLEM10H-1.webp" alt="Product Image">
-              </a>
-            </div>
-
-            <a class="after:z-1 after:absolute after:inset-0" href="../../pro/shop-marketplace/product-detail.html"></a>
-
-            <div class="pt-3">
-              <h4 class="font-medium text-sm text-gray-800 dark:text-neutral-200 capitalize">
-                x SHAI 001 Lace Up Unisex Sneakers - Lime Latte
-              </h4>
-              <div class="mt-1 flex flex-wrap items-center gap-1">
-                <span class="font-semibold text-emerald-600 dark:text-emerald-500">
-                  Rp <span class="text-sm">2.300.000</span>
-                </span>
-                <span class="ms-auto text-sm text-gray-500 dark:text-neutral-500">
-                  Converse
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- End Card -->
-
-        <!-- Card -->
-        <div class="h-full flex flex-col">
-          <div class="group relative">
-            <div class="relative">
-              <a class="block shrink-0 relative w-full h-48 md:h-64 overflow-hidden rounded-xl focus:outline-hidden" href="../../pro/shop-marketplace/product-detail.html">
-                <img class="size-full absolute inset-0 object-cover object-center group-hover:scale-105 group-focus:scale-105 transition-transform duration-500 ease-in-out rounded-xl" src="../assets/img/product/0886-ADIKZ671370012H-1.webp" alt="Product Image">
-              </a>
-            </div>
-
-            <a class="after:z-1 after:absolute after:inset-0" href="../../pro/shop-marketplace/product-detail.html"></a>
-
-            <div class="pt-3">
-              <h4 class="font-medium text-sm text-gray-800 dark:text-neutral-200 capitalize">
-                Handball Spezial Loafer Men's Sneakers - Dark Brown
-              </h4>
-              <div class="mt-1 flex flex-wrap items-center gap-1">
-                <span class="font-semibold text-emerald-600 dark:text-emerald-500">
-                  Rp <span class="text-sm">2.200.000</span>
-                </span>
-                <span class="ms-auto text-sm text-gray-500 dark:text-neutral-500">
-                  Adidas
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- End Card -->
-
-        <!-- Card -->
-        <div class="h-full flex flex-col">
-          <div class="group relative">
-            <div class="relative">
-              <a class="block shrink-0 relative w-full h-48 md:h-64 overflow-hidden rounded-xl focus:outline-hidden" href="../../pro/shop-marketplace/product-detail.html">
-                <img class="size-full absolute inset-0 object-cover object-center group-hover:scale-105 group-focus:scale-105 transition-transform duration-500 ease-in-out rounded-xl" src="../assets/img/product/01-PUMA-F34KBPMAA-PMA314098-03-Mint.webp" alt="Product Image">
-              </a>
-            </div>
-
-            <a class="after:z-1 after:absolute after:inset-0" href="../../pro/shop-marketplace/product-detail.html"></a>
-
-            <div class="pt-3">
-              <h4 class="font-medium text-sm text-gray-800 dark:text-neutral-200 capitalize">
-                Hali 1 Unisex Basketball Shoes - Fresh Mint
-              </h4>
-              <div class="mt-1 flex flex-wrap items-center gap-1">
-                <span class="font-semibold text-emerald-600 dark:text-emerald-500">
-                  Rp <span class="text-sm">2.199.000</span>
-                </span>
-                <span class="ms-auto text-sm text-gray-500 dark:text-neutral-500">
-                  Puma
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- End Card -->
+        @empty
+          <p class="col-span-full py-4 text-sm text-gray-500 dark:text-neutral-400">
+            Belum ada sepatu di kategori ini.
+          </p>
+        @endforelse
 
 
       </div>
       <!-- End Grid -->
 
-      <div class="mt-10 text-center max-w-40 mx-auto">
-        <button type="button" class="py-3 px-4 w-full inline-flex justify-center items-center gap-x-1 text-sm font-medium rounded-full border border-transparent bg-emerald-600 text-white hover:bg-emerald-700 disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:bg-emerald-700">
-          See more
-        </button>
-      </div>
+
     </div>
     <!-- End Explore Interests -->
   </main>
