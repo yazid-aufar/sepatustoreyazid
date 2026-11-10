@@ -309,7 +309,8 @@
                   <!-- Item -->
                   <div class=" flex gap-x-5">
                     <div class="relative">
-                      <img class="shrink-0 w-20 h-28 object-contain rounded-lg dark:bg-neutral-700" src="{{ $thumbnailUrl ?? asset('assets/img/logo/logo-short.png') }}" alt="{{ $shoe?->name ?? 'Product Image' }}">
+
+                      <img class="shrink-0 w-20 h-28 object-contain rounded-lg dark:bg-neutral-700" src="{{ $thumbnailUrl ?? asset('assets/img/logo/logo-short.png') }}" alt="{{ $orderDetails->shoe->name }}">
                     </div>
 
                     <div class="grow flex flex-col">
@@ -329,7 +330,7 @@
                         </span>
                       </div>
                       <p class="text-sm font-semibold text-stone-800 dark:text-neutral-200">
-                        12 January 2045
+                        {{ $orderDetails->created_at->format('d M Y H:i') }}
                       </p>
                     </div>
 
@@ -407,7 +408,7 @@
                         </span>
                       </div>
                       <p class="text-sm font-semibold text-stone-800 dark:text-neutral-200">
-                        {{ $orderDetails->shoe->size }}
+                        {{ $orderDetails->ShoeSize->size }}
                       </p>
                     </div>
                   </div>

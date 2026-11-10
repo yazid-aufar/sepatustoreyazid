@@ -45,6 +45,11 @@ class ProductTransaction extends Model
         return $this->belongsTo(Shoe::class, 'shoe_id');
     }
 
+    public function shoeSize()
+    {
+        return $this->belongsTo(ShoeSize::class, 'shoe_size');
+    }
+
     public function promoCode()
     {
         return $this->belongsTo(PromoCode::class, 'promo_code_id');
