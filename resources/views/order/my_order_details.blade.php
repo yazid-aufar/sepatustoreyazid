@@ -370,7 +370,7 @@
                         </span>
                       </div>
                       <p class="text-sm font-semibold text-stone-800 dark:text-neutral-200">
-                        Nike Indonesia
+                        {{ $orderDetails->shoe->brand->name }}
                       </p>
                     </div>
 
@@ -381,7 +381,7 @@
                         </span>
                       </div>
                       <p class="text-sm font-semibold text-stone-800 dark:text-neutral-200">
-                        1.939.000
+                        {{ number_format($orderDetails->shoe->price, 0, ',', '.') }}
                       </p>
                     </div>
                   </div>
@@ -396,7 +396,7 @@
                         </span>
                       </div>
                       <p class="text-sm font-semibold text-stone-800 dark:text-neutral-200">
-                        1 Pcs
+                        {{ $orderDetails->quantity }} Pcs
                       </p>
                     </div>
 
@@ -407,7 +407,7 @@
                         </span>
                       </div>
                       <p class="text-sm font-semibold text-stone-800 dark:text-neutral-200">
-                        EU 42
+                        {{ $orderDetails->shoe->size }}
                       </p>
                     </div>
                   </div>

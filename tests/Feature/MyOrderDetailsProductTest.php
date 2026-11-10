@@ -24,13 +24,13 @@ class MyOrderDetailsProductTest extends TestCase
             ->assertDontSee('NIKE-F34KBNIK5-NIKIO7448400');
     }
 
-    public function test_order_details_displays_a_placeholder_when_the_shoe_is_missing(): void
+    public function test_order_details_displays_a_placeholder_when_the_shoe_has_no_thumbnail(): void
     {
         $order = new ProductTransaction;
-        $order->setRelation('shoe', null);
+        $order->setRelation('shoe', new Shoe(['name' => 'Sepatu Tanpa Gambar']));
 
         $this->view('order.my_order_details', ['orderDetails' => $order])
-            ->assertSee('Product unavailable')
+            ->assertSee('Sepatu Tanpa Gambar')
             ->assertSee(asset('assets/img/logo/logo-short.png'));
     }
 }
