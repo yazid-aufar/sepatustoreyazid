@@ -297,7 +297,8 @@
 
 
               <!-- Products Card -->
-              <div class="mb-5 flex flex-col bg-white border border-stone-200 overflow-hidden rounded-xl shadow-2xs dark:bg-neutral-800 dark:border-neutral-700">
+              <form method="POST" action="{{ route('front.check_booking_details') }}" class="mb-5 flex flex-col bg-white border border-stone-200 overflow-hidden rounded-xl shadow-2xs dark:bg-neutral-800 dark:border-neutral-700">
+                @csrf
                 <!-- Header -->
                 <div class="py-3 px-5 flex justify-between items-center gap-x-5 border-b border-stone-200 dark:border-neutral-700">
                   <h2 class="inline-block font-semibold text-stone-800 dark:text-neutral-200">
@@ -311,7 +312,7 @@
 
                   <!-- Input -->
                   <div>
-                    <label for="hs-pro-epdnm" class="block mb-2 text-sm font-medium text-stone-800 dark:text-neutral-200">
+                    <label for="booking_trx_id" class="block mb-2 text-sm font-medium text-stone-800 dark:text-neutral-200">
                       Booking ID
                       <span class="hs-tooltip inline-block align-middle">
 
@@ -320,13 +321,13 @@
                         </span>
                       </span>
                     </label>
-                    <input id="hs-pro-daufvd" type="text" class="py-1.5 sm:py-2 px-3 block w-full border-stone-200 rounded-lg sm:text-sm text-stone-800 placeholder:text-stone-500 focus:z-10 focus:border-green-600 focus:ring-green-600 dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-200 dark:placeholder:text-neutral-500 dark:focus:outline-hidden dark:focus:ring-1 dark:focus:ring-neutral-600" placeholder="What's your booking ID" >
+                    <input id="booking_trx_id" name="booking_trx_id" type="text" class="py-1.5 sm:py-2 px-3 block w-full border-stone-200 rounded-lg sm:text-sm text-stone-800 placeholder:text-stone-500 focus:z-10 focus:border-green-600 focus:ring-green-600 dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-200 dark:placeholder:text-neutral-500 dark:focus:outline-hidden dark:focus:ring-1 dark:focus:ring-neutral-600" placeholder="What's your booking ID" >
                   </div>
                   <!-- End Input -->
 
                   <!-- Input -->
                   <div>
-                    <label for="hs-pro-epdnm" class="block mb-2 text-sm font-medium text-stone-800 dark:text-neutral-200">
+                    <label for="phone" class="block mb-2 text-sm font-medium text-stone-800 dark:text-neutral-200">
                       Phone Number
                       <span class="hs-tooltip inline-block align-middle">
 
@@ -335,31 +336,22 @@
                         </span>
                       </span>
                     </label>
-                    <input id="hs-pro-daufvd" type="text" class="py-1.5 sm:py-2 px-3 block w-full border-stone-200 rounded-lg sm:text-sm text-stone-800 placeholder:text-stone-500 focus:z-10 focus:border-green-600 focus:ring-green-600 dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-200 dark:placeholder:text-neutral-500 dark:focus:outline-hidden dark:focus:ring-1 dark:focus:ring-neutral-600" placeholder="What's your phone number" >
+                    <input id="phone" name="phone" type="text" class="py-1.5 sm:py-2 px-3 block w-full border-stone-200 rounded-lg sm:text-sm text-stone-800 placeholder:text-stone-500 focus:z-10 focus:border-green-600 focus:ring-green-600 dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-200 dark:placeholder:text-neutral-500 dark:focus:outline-hidden dark:focus:ring-1 dark:focus:ring-neutral-600" placeholder="What's your phone number" >
                   </div>
                   <!-- End Input -->
 
-
-
+                  <!-- Submit Button -->
+                  <div class="pt-4">
+                    <button type="submit" class="w-full py-2 px-3 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-green-600 text-white hover:bg-green-700 focus:outline-hidden focus:bg-green-700 transition-all dark:focus:ring-1 dark:focus:ring-neutral-600">
+                      Check Order
+                    </button>
+                  </div>
+                  <!-- End Submit Button -->
 
                 </div>
                 <!-- End Body -->
-              </div>
+              </form>
               <!-- End Products Card -->
-
-
-
-
-              <!-- Button Group -->
-              <div class="mt-5 mb-20 grid grid-cols-1 ">
-
-                <a href="../../shop-marketplace/index.html" class="w-full py-2.5 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-green-600 text-white hover:bg-green-700 disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:ring-2 focus:ring-green-500">
-                  Find Booking
-                </a>
-              </div>
-              <!-- End Button Group -->
-
-
 
             </div>
 
