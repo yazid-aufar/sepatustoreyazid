@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en" class="relative min-h-full scroll-smooth">
 <head>
@@ -308,12 +309,12 @@
                   <!-- Item -->
                   <div class=" flex gap-x-5">
                     <div class="relative">
-                      <img class="shrink-0 w-20 h-28 object-contain rounded-lg dark:bg-neutral-700" src="../assets/img/product/NIKE-F34KBNIK5-NIKIO7448400-Navy 01-.webp" alt="Product Image">
+                      <img class="shrink-0 w-20 h-28 object-contain rounded-lg dark:bg-neutral-700" src="{{ $thumbnailUrl ?? asset('assets/img/logo/logo-short.png') }}" alt="{{ $shoe?->name ?? 'Product Image' }}">
                     </div>
 
                     <div class="grow flex flex-col">
                       <label for="hs-pro-epdsku" class="block mb-2 text-lg font-medium text-stone-800 dark:text-neutral-200 capitalize">
-                        air jordan 1 low - obsidian university gold
+                        {{ $orderDetails->shoe->name }}
                       </label>
                     </div>
                   </div>
