@@ -52,6 +52,14 @@ class OrderService
         return $this->getOrderDetails();
     }
 
+    public function getMyOrderDetails(array $validated)
+    {
+        return $this->orderRepository->findTransactionByBookingTrxIdAndPhoneNumber(
+            $validated['booking_trx_id'],
+            $validated['phone']
+        );
+    }
+
     public function getOrderDetails()
     {
         $orderData = $this->orderRepository->getOrderDataFromSession();
