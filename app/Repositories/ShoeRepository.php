@@ -17,7 +17,9 @@ class ShoeRepository implements ShoeRepositoryInterface
 
     public function searchByName(string $keyword)
     {
-        return Shoe::where('name', 'LIKE', '%' . $keyword . '%')->get();
+        return Shoe::with('brand')
+            ->where('name', 'LIKE', '%' . $keyword . '%')
+            ->get();
     }
 
     public function getAllNewShoes()

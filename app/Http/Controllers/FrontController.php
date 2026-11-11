@@ -20,14 +20,17 @@ class FrontController extends Controller
 
     public function search(Request $request)
     {
-        $keyword = $request->input('keyword');
-
-        $shoes = $this->frontService->searchShoes($keyword);
-
-        return view('front.search', [
-            'shoes' => $shoes,
-            'keyword' => $keyword
+        $validated = $request->validate([
+            'keyword' => ['nullable', 'string', 'max:255'],
         ]);
+
+        $keyword = trim($validated['keyword'] ?? '');
+
+        $shoes = $keyword === ''
+            ? collect()
+            : $this->frontService->searchShoes($keyword);
+
+        return view('front.search', compact('shoes', 'keyword'));
     }
 
     public function index()
